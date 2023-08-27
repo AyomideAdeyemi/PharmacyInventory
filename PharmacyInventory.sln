@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{51008DFC-FD1A-4CA6-B089-8A0C461E6D4F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{63602C55-D905-4914-BD2D-49348AB3160A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyInventory_Application", "src\backend\PharmacyInventory_Application\PharmacyInventory_Application.csproj", "{7806B2D6-DF69-4024-B871-58A1DA238674}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyInventory_Domain", "src\backend\PharmacyInventory_Domain\PharmacyInventory_Domain.csproj", "{B0CECD09-6A0D-4748-8085-D2D93C3BF27E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyInventory_Infrastructure", "src\backend\PharmacyInventory_Infrastructure\PharmacyInventory_Infrastructure.csproj", "{591FD789-156A-4F41-81D1-889C58506AEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyInventory_WebApi", "src\backend\PharmacyInventory_WebApi\PharmacyInventory_WebApi.csproj", "{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7806B2D6-DF69-4024-B871-58A1DA238674}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7806B2D6-DF69-4024-B871-58A1DA238674}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7806B2D6-DF69-4024-B871-58A1DA238674}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7806B2D6-DF69-4024-B871-58A1DA238674}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0CECD09-6A0D-4748-8085-D2D93C3BF27E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0CECD09-6A0D-4748-8085-D2D93C3BF27E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0CECD09-6A0D-4748-8085-D2D93C3BF27E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0CECD09-6A0D-4748-8085-D2D93C3BF27E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{591FD789-156A-4F41-81D1-889C58506AEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{591FD789-156A-4F41-81D1-889C58506AEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{591FD789-156A-4F41-81D1-889C58506AEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{591FD789-156A-4F41-81D1-889C58506AEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{63602C55-D905-4914-BD2D-49348AB3160A} = {51008DFC-FD1A-4CA6-B089-8A0C461E6D4F}
+		{7806B2D6-DF69-4024-B871-58A1DA238674} = {63602C55-D905-4914-BD2D-49348AB3160A}
+		{B0CECD09-6A0D-4748-8085-D2D93C3BF27E} = {63602C55-D905-4914-BD2D-49348AB3160A}
+		{591FD789-156A-4F41-81D1-889C58506AEF} = {63602C55-D905-4914-BD2D-49348AB3160A}
+		{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD} = {63602C55-D905-4914-BD2D-49348AB3160A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {76F9EE6D-D56A-49A2-8747-196E457101A1}
+	EndGlobalSection
+EndGlobal
