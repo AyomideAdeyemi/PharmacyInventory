@@ -2,15 +2,15 @@
 
 A Complete Pharmacy Inventory Application Using CleanArchitecture
 
-Welcome to the Pharmacy Inventory Application! This application allows you to manage medication inventory and user information for a pharmacy.
+Welcome to the Pharmacy Inventory Application! This application allows you to manage Drug inventory and user information for a pharmacy.
 
 ## Features
 
 - User Management: Add, update, and delete user profiles.
-- Medication Management: Manage information about different medications.
-- Inventory Tracking: Keep track of medication quantities held by users.
-- Unit Conversion: Define different units for medications (e.g., tablets, bottles, sachets).
-- Relationships: Establish relationships between users and medications.
+- Drug Management: Manage information about different Drugs.
+- Inventory Tracking: Keep track of Drug quantities held by users.
+- Unit Conversion: Define different units for Drug (e.g., tablets, bottles, sachets).
+- Relationships: Establish relationships between users and Drugs.
 
 ## Technologies Used
 
