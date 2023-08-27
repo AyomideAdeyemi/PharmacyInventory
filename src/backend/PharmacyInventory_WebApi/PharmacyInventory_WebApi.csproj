@@ -7,12 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions.Json" Version="6.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PharmacyInventory_Application\PharmacyInventory_Application.csproj" />
     <ProjectReference Include="..\PharmacyInventory_Domain\PharmacyInventory_Domain.csproj" />
     <ProjectReference Include="..\PharmacyInventory_Infrastructure\PharmacyInventory_Infrastructure.csproj" />
   </ItemGroup>

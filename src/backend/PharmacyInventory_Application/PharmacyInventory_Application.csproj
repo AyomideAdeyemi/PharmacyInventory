@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PharmacyInventory_Domain\PharmacyInventory_Domain.csproj" />
+  </ItemGroup>
+
 </Project>
