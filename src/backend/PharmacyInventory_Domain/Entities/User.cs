@@ -3,7 +3,7 @@ using PharmacyInventory_Domain.Enum;
 
 namespace PharmacyInventory_Domain.Entities
 {
-    public class User 
+    public class User : IdentityUser
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
