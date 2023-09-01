@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmacyInventory_Infrastructure.Persistence;
 using PharmacyInventory_Infrastructure.Repository.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PharmacyInventory_Infrastructure.Repository.Implementations
 {
@@ -32,7 +27,7 @@ namespace PharmacyInventory_Infrastructure.Repository.Implementations
         .Where(expression);
 
 
-        public void Create(T entity) => RepositoryContext.Set<T>().Add(entity);
+        public async Task Create(T entity) => RepositoryContext.Set<T>().Add(entity);
         public void Update(T entity) => RepositoryContext.Set<T>().Update(entity);
         public void Delete(T entity) => RepositoryContext.Set<T>().Remove(entity);
     }
