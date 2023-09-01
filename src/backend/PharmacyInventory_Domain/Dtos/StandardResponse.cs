@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CleanArchitecture_Domain.Dtos
+namespace PharmacyInventory_Domain.Dtos
 {
 
     public class StandardResponse<T>
