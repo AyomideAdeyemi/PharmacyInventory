@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ContactBook_Domain.Dtos.Requests
+namespace PharmacyInventory_Domain.Dtos.Requests
 {
     public class UserLoginDto
     {
