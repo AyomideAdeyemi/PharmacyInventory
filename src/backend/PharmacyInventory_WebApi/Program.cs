@@ -1,12 +1,22 @@
 using Microsoft.EntityFrameworkCore;
+using PharmacyInventory_Application.Common;
 using PharmacyInventory_Infrastructure.Persistence;
 using PharmacyInventory_WebApi.Services;
-using System;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.ConfigureIUnitOfWork();
+var logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+builder.Services.ConfigureJWT(builder.Configuration);
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
+builder.Services.DependencyInjection();
+builder.Services.AddAutoMapper(typeof(MapInitializers));
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -27,7 +37,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
