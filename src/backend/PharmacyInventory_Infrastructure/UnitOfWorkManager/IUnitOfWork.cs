@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PharmacyInventory_Infrastructure.Repository.Abstractions;
+﻿using PharmacyInventory_Infrastructure.Repository.Abstractions;
 
 namespace PharmacyInventory_Infrastructure.UnitOfWorkManager
 {
     public interface IUnitOfWork
     {
         IDrugRepository Drug { get; }
-
-        void SaveAsync();
+        ISupplierRepository Supplier { get; }
+        IGenericNameRepository GenericName { get; }
+        IBrandRepository Brand { get; }
+        IUnitRepository Unit { get; }
+        IUserRepository User { get; }
+        Task SaveAsync();
     }
 }
