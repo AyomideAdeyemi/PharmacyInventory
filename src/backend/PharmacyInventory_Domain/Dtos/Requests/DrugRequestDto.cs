@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PharmacyInventory_Domain.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CleanArchitecture_Domain.Dtos.Requests
+namespace PharmacyInventory_Domain.Dtos.Requests
 {
     public class DrugRequestDto
     {
-       
         public string Name { get; set; }
-        public string Address { get; set; }
-        public string Country { get; set; }
+        public double Quantity { get; set; }
+        public decimal PricePerUnit { get; set; }             
+        public string ImageUrl { get; set; }     
+        public DateTime ExpireDate { get; set; }
     }
 }
