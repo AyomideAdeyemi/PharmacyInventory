@@ -7,13 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{51008DFC-FD1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{63602C55-D905-4914-BD2D-49348AB3160A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyInventory_Application", "src\backend\PharmacyInventory_Application\PharmacyInventory_Application.csproj", "{7806B2D6-DF69-4024-B871-58A1DA238674}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmacyInventory_Application", "src\backend\PharmacyInventory_Application\PharmacyInventory_Application.csproj", "{7806B2D6-DF69-4024-B871-58A1DA238674}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyInventory_Domain", "src\backend\PharmacyInventory_Domain\PharmacyInventory_Domain.csproj", "{B0CECD09-6A0D-4748-8085-D2D93C3BF27E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmacyInventory_Domain", "src\backend\PharmacyInventory_Domain\PharmacyInventory_Domain.csproj", "{B0CECD09-6A0D-4748-8085-D2D93C3BF27E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyInventory_Infrastructure", "src\backend\PharmacyInventory_Infrastructure\PharmacyInventory_Infrastructure.csproj", "{591FD789-156A-4F41-81D1-889C58506AEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmacyInventory_Infrastructure", "src\backend\PharmacyInventory_Infrastructure\PharmacyInventory_Infrastructure.csproj", "{591FD789-156A-4F41-81D1-889C58506AEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyInventory_WebApi", "src\backend\PharmacyInventory_WebApi\PharmacyInventory_WebApi.csproj", "{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmacyInventory_WebApi", "src\backend\PharmacyInventory_WebApi\PharmacyInventory_WebApi.csproj", "{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyInventory_Shared", "src\backend\PharmacyInventory_Shared\PharmacyInventory_Shared.csproj", "{F4FB23CD-0588-4523-A608-208D03734625}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4FB23CD-0588-4523-A608-208D03734625}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4FB23CD-0588-4523-A608-208D03734625}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4FB23CD-0588-4523-A608-208D03734625}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4FB23CD-0588-4523-A608-208D03734625}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +53,7 @@ Global
 		{B0CECD09-6A0D-4748-8085-D2D93C3BF27E} = {63602C55-D905-4914-BD2D-49348AB3160A}
 		{591FD789-156A-4F41-81D1-889C58506AEF} = {63602C55-D905-4914-BD2D-49348AB3160A}
 		{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD} = {63602C55-D905-4914-BD2D-49348AB3160A}
+		{F4FB23CD-0588-4523-A608-208D03734625} = {63602C55-D905-4914-BD2D-49348AB3160A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {76F9EE6D-D56A-49A2-8747-196E457101A1}
