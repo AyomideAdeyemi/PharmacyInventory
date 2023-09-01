@@ -9,10 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PharmacyInventory_Domain\PharmacyInventory_Domain.csproj" />
     <ProjectReference Include="..\PharmacyInventory_Infrastructure\PharmacyInventory_Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Common\" />
+    <ProjectReference Include="..\PharmacyInventory_Shared\PharmacyInventory_Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
