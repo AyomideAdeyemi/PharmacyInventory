@@ -14,10 +14,10 @@ namespace PharmacyInventory_Application.Services.Interfaces
     public interface IBrandService
     {
         Task<StandardResponse<BrandResponseDto>> CreateBrandAsync(BrandRequestDto brandRequestDto);
-        Task<StandardResponse<string>> DeleteBrand(int id);
-        Task<StandardResponse<BrandResponseDto>> UpdateBrand(int id, BrandRequestDto brandRequestDto);
-        Task<StandardResponse<BrandResponseDto>> GetBrandById(int id);
-        Task<StandardResponse<(IEnumerable<BrandResponseDto>, MetaData)>> GetAllBrands(BrandRequestInputParameter parameter);
+        Task<StandardResponse<string>> DeleteBrand(string id);
+        Task<StandardResponse<BrandResponseDto>> UpdateBrand(string id, BrandRequestDto brandRequestDto);
+        Task<StandardResponse<BrandResponseDto>> GetBrandById(string id);
+        Task<StandardResponse<(IEnumerable<BrandResponseDto>, MetaData)>> GetAllBrands();
 
 
     }

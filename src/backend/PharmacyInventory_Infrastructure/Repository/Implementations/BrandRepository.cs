@@ -16,14 +16,15 @@ namespace PharmacyInventory_Infrastructure.Repository.Implementations
             _brand = repositoryContext.Set<Brand>();
         }
 
-        public async Task<Brand> GetBrandById(int id)
+        public async Task<Brand> GetBrandById(string id)
         {
             return await _brand.FindAsync(id);
         }
 
 
-        public async Task<PagedList<Brand>> GetAllBrands(BrandRequestInputParameter parameter)
+        public async Task<PagedList<Brand>> GetAllBrands()
         {
+            var parameter = new BrandRequestInputParameter();
             var result = await _brand.Skip((parameter.PageNumber - 1) * parameter.PageSize)
                 .Take(parameter.PageSize).ToListAsync();
             var count = await _brand.CountAsync();

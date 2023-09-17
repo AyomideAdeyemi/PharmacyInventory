@@ -12,7 +12,7 @@ namespace PharmacyInventory_Infrastructure.Repository.Abstractions
 {
     public interface ISupplierRepository : IRepositoryBase<Supplier>
     {
-        Task<Supplier> GetSupplierById(int id);
+        Task<Supplier> GetSupplierById(string id);
         Task<PagedList<Supplier>> GetAllSupplier(SupplierRequestInputParameter parameter);
     }
 }

@@ -25,16 +25,16 @@ namespace PharmacyInventory_WebApi.Controllers
 
         // GET api/<DrugController>/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBrandById(int id)
+        public async Task<IActionResult> GetBrandById(string id)
         {
             var result = await _brandService.GetBrandById(id);
             return Ok(result);
         }
+        
         [HttpGet]
-
-        public async Task<IActionResult> GetAllBrands([FromQuery] BrandRequestInputParameter parameter)
+        public async Task<IActionResult> GetAllBrands()
         {
-            var result = await _brandService.GetAllBrands(parameter);
+            var result = await _brandService.GetAllBrands();
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.Data.Item2));
             return Ok(result.Data.Item1);
         }
@@ -48,18 +48,18 @@ namespace PharmacyInventory_WebApi.Controllers
         }
 
         // PUT api/<DrugController>/5
-        [HttpPut("{UpdateBrand}")]
+        [HttpPut("UpdateBrand/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateBrand(int id, [FromBody] BrandRequestDto requestDto)
+        public async Task<IActionResult> UpdateBrand(string id, [FromBody] BrandRequestDto requestDto)
         {
             var result = await _brandService.UpdateBrand(id, requestDto);
             return Ok(result);
         }
 
         // DELETE api/<DrugController>/5
-        [HttpDelete("{DeleteBrand}")]
+        [HttpDelete("DeleteBrand{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteBrand(int id)
+        public async Task<IActionResult> DeleteBrand(string id)
         {
             var result = await _brandService.DeleteBrand(id);
             return Ok(result);

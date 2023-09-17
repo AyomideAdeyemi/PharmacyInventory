@@ -20,7 +20,7 @@ namespace PharmacyInventory_Infrastructure.Repository.Implementations
             _unit = repositoryContext.Set<Unit>();
         }
 
-        public async Task<Unit> GetUnitById(int id)
+        public async Task<Unit> GetUnitById(string id)
         {
             return await _unit.FindAsync(id);
         }

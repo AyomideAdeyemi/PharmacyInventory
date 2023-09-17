@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ContactBook_Domain.Dtos.Responses
+namespace PharmacyInventory_Application.Services.Implementations
 {
-    public class ContactResponseDto
+    internal class ImageService
     {
     }
 }

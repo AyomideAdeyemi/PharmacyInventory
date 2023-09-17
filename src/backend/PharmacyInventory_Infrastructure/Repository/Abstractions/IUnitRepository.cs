@@ -11,7 +11,7 @@ namespace PharmacyInventory_Infrastructure.Repository.Abstractions
 {
     public interface IUnitRepository : IRepositoryBase<Unit>
     {
-        Task<Unit> GetUnitById(int id);
+        Task<Unit> GetUnitById(string id);
         Task<PagedList<Unit>> GetAlBrands(BrandRequestInputParameter parameter);
     }
 }

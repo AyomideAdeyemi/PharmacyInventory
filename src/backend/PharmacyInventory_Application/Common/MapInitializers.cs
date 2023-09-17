@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using PharmacyInventory_Domain.Dtos.Requests;
 using PharmacyInventory_Domain.Dtos.Responses;
 using PharmacyInventory_Domain.Entities;
@@ -26,8 +27,15 @@ namespace PharmacyInventory_Application.Common
             CreateMap<GenericNameRequestDto, GenericName>();
             CreateMap<GenericName, GenericNameResponseDto>();
 
-            CreateMap<UserRequestDto, User>();
+            CreateMap<UnitRequestDto, Unit>();
+            CreateMap<Unit, UnitResponseDto>();
 
+            CreateMap<UserRequestDto, User>();
+            CreateMap<User, UserResponseDto>();
+
+            CreateMap<IdentityResult, UserResponseDto>();
+            CreateMap<UserResponseDto, IdentityResult>();
+                       
 
         }
 

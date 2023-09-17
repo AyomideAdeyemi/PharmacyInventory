@@ -21,7 +21,7 @@ namespace PharmacyInventory_WebApi.Controllers
         }
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUnitById(int id)
+        public async Task<IActionResult> GetUnitById(string id)
         {
             var result = await _unitService.GetUnitById(id);
             return Ok(result);
@@ -29,25 +29,25 @@ namespace PharmacyInventory_WebApi.Controllers
 
         // POST api/<UserController>
         [HttpPost]
-        public async Task<IActionResult> CreateUnit([FromBody] UnitRequestDto requestDto)
+        public async Task<IActionResult> CreateUnit([FromForm] UnitRequestDto requestDto)
         {
             var result = await _unitService.CreateUnitAsync(requestDto);
             return Ok(result);
         }
 
         // PUT api/<DrugController>/5
-        [HttpPut("{UpdateUnit}")]
+        [HttpPut("UpdateUnit{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateUnit(int id, [FromBody] UnitRequestDto requestDto)
+        public async Task<IActionResult> UpdateUnit(string id, [FromBody] UnitRequestDto requestDto)
         {
             var result = await _unitService.UpdateUnit(id, requestDto);
             return Ok(result);
         }
 
         // DELETE api/<DrugController>/5
-        [HttpDelete("{DeleteUser}")]
+        [HttpDelete("DeleteUnit/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteUnit(int id)
+        public async Task<IActionResult> DeleteUnit(string id)
         {
             var result = await _unitService.DeleteUnit(id);
             return Ok(result);

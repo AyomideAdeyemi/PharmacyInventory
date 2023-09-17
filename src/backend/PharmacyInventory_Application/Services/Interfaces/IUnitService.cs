@@ -12,8 +12,8 @@ namespace PharmacyInventory_Application.Services.Interfaces
     public interface IUnitService
     {
         Task<StandardResponse<UnitResponseDto>> CreateUnitAsync(UnitRequestDto unitRequestDto);
-        Task<StandardResponse<string>> DeleteUnit(int id);
-        Task<StandardResponse<UnitResponseDto>> UpdateUnit(int id, UnitRequestDto unitRequestDto);
-        Task<StandardResponse<UnitResponseDto>> GetUnitById(int id);
+        Task<StandardResponse<string>> DeleteUnit(string id);
+        Task<StandardResponse<UnitResponseDto>> UpdateUnit(string id, UnitRequestDto unitRequestDto);
+        Task<StandardResponse<UnitResponseDto>> GetUnitById(string id);
     }
 }

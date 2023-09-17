@@ -36,7 +36,7 @@ namespace PharmacyInventory_Application.Services.Implementations
 
         }
 
-        public async Task<StandardResponse<string>> DeleteGenericName(int id)
+        public async Task<StandardResponse<string>> DeleteGenericName(string id)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
-        public async Task<StandardResponse<GenericNameResponseDto>> UpdateGenericName(int id, GenericNameRequestDto genericNameRequestDto)
+        public async Task<StandardResponse<GenericNameResponseDto>> UpdateGenericName(string id, GenericNameRequestDto genericNameRequestDto)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
-        public async Task<StandardResponse<GenericNameResponseDto>> GetGenericNameById(int id)
+        public async Task<StandardResponse<GenericNameResponseDto>> GetGenericNameById(string id)
         {
             try
             {
@@ -104,11 +104,12 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
-        public async Task<StandardResponse<(IEnumerable<GenericNameResponseDto>, MetaData)>> GetAllUGenericName(GenericNameRequestInputParameter parameter)
+        public async Task<StandardResponse<(IEnumerable<GenericNameResponseDto>, MetaData)>> GetAllGenericName()
         {
             try
             {
-                var genericNames = await _unitOfWork.GenericName.GetAllGenericName(parameter);
+               var parameter = new GenericNameRequestInputParameter();
+                var genericNames = await _unitOfWork.GenericName.GetAllGenericName();
                 var genericNameDtos = _mapper.Map<IEnumerable<GenericNameResponseDto>>(genericNames);
                 return StandardResponse<(IEnumerable<GenericNameResponseDto> _contact, MetaData pagingData)>.Success("Successfully retrieved all genericName", (genericNameDtos, genericNames.MetaData), 200);
             }

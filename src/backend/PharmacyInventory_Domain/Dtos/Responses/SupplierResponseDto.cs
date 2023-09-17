@@ -10,6 +10,7 @@ namespace PharmacyInventory_Domain.Dtos.Responses
 {
     public class SupplierResponseDto : AuditableBaseEntityDto
     {
+        public string Id { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
     }

@@ -7,6 +7,10 @@ using PharmacyInventory_Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using PharmacyInventory_Infrastructure.Repository.Abstractions;
+using Microsoft.OpenApi.Models;
+using PharmacyInventory_WebApi.Properties;
+using PharmacyInventory_Infrastructure.Repository.Implementations;
 
 namespace PharmacyInventory_WebApi.Services
 {
@@ -16,14 +20,20 @@ namespace PharmacyInventory_WebApi.Services
 
         public static void DependencyInjection(this IServiceCollection services)
         {
+            
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISupplierService, SupplierService>();
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<IGenericNameService, GenericNameService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-           // services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<IDrugService, DrugService>();
+            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+          
+
         }
 
         public static void ConfigureIdentity(this IServiceCollection services)
@@ -40,6 +50,8 @@ namespace PharmacyInventory_WebApi.Services
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
         }
+
+
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration
 configuration)
         {
@@ -65,6 +77,40 @@ configuration)
                 };
             });
         }
+        public static void ConfigureSwaggerAuth(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(opt =>
+            {
+                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Pharmacy Inventory Application", Version = "v1" });
+                opt.SchemaFilter<EnumSchemaFilter>();
+                opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter an access token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
 
+
+
+                opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+            });
+
+        }
     }
 }

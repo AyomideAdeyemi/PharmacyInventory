@@ -10,6 +10,7 @@ namespace PharmacyInventory_Domain.Dtos.Responses
 {
     public class UnitResponseDto : AuditableBaseEntityDto
     {
+        public string Id { get; set; }
         public UnitType UnitType { get; set; }
         public double ConversionFactor { get; set; }
 

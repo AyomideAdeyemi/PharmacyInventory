@@ -18,14 +18,15 @@ namespace PharmacyInventory_Infrastructure.Repository.Implementations
         }
 
 
-        public async Task<GenericName> GetGenericNameById(int id)
+        public async Task<GenericName> GetGenericNameById(string id)
         {
             return await _genericName.FindAsync(id);
         }
 
 
-        public async Task<PagedList<GenericName>> GetAllGenericName(GenericNameRequestInputParameter parameter)
+        public async Task<PagedList<GenericName>> GetAllGenericName()
         {
+            var parameter = new GenericNameRequestInputParameter();
             var result = await _genericName.Skip((parameter.PageNumber - 1) * parameter.PageSize)
                 .Take(parameter.PageSize).ToListAsync();
             var count = await _genericName.CountAsync();

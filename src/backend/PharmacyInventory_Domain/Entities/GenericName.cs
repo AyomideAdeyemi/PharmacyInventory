@@ -2,6 +2,7 @@
 {
     public class GenericName : AuditableBaseEntity
     {
+
         public ICollection<Drug> Drugs { get; set; }
     }
 }

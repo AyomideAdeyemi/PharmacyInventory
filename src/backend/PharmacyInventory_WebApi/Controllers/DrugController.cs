@@ -22,50 +22,56 @@ namespace PharmacyInventory_WebApi.Controllers
         // GET: api/<DrugController>
         [HttpGet]
 
-        public async Task<IActionResult> GetAllDrugs([FromQuery] DrugRequestInputParameter parameter)
+        public async Task<IActionResult> GetAllDrugs()
         {
-            var result = await _drugService.GetAllDrugs(parameter);
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.Data.Item2));
+            var result = await _drugService.GetAllDrugs();
+           Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.Data.Item2));
             return Ok(result.Data.Item1);
         }
 
         [HttpGet("expiry-range")]
-        public async Task<IActionResult> GetDrugsByExpiryDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] DrugRequestInputParameter parameter)
+        public async Task<IActionResult> GetDrugsByExpiryDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
-            var result = await _drugService.GetDrugsByExpiryDateRange(startDate, endDate, parameter);
-            return Ok(result);
+            var result = await _drugService.GetDrugsByExpiryDateRange(startDate, endDate);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.Data.Item2));
+            return Ok(result.Data.Item1);
+
         }
 
 
         // GET: api/<DrugController>
-        [HttpGet("brand/{brand}")]
-        public async Task<IActionResult> GetDrugsByBrand(string brand, [FromQuery] DrugRequestInputParameter parameter)
+        [HttpGet("brand/{brandId}")]
+        public async Task<IActionResult> GetDrugsByBrand(string brandId)
         {
-            var result = await _drugService.GetDrugsByBrand(brand, parameter);
-            return Ok(result);
+            var result = await _drugService.GetDrugsByBrand(brandId);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.Data.Item2));
+            return Ok(result.Data.Item1);
         }
 
         // GET: api/<DrugController>
-        [HttpGet("supplier/{supplier}")]
-        public async Task<IActionResult> GetDrugsBySupplier(string supplier, [FromQuery] DrugRequestInputParameter parameter)
+        [HttpGet("supplier/{supplierId}")]
+        public async Task<IActionResult> GetDrugsBySupplier(string supplierId)
         {
-            var result = await _drugService.GetDrugsBySupplier(supplier, parameter);
-            return Ok(result);
+            var result = await _drugService.GetDrugsBySupplier(supplierId);
+            Response.Headers.Add("X-Pagination",JsonSerializer.Serialize(result.Data.Item2));
+            return Ok(result.Data.Item1);
         }
 
         // GET: api/<DrugController>
-        [HttpGet("genericName/{genericName}")]
-        public async Task<IActionResult> GetDrugsByGenericName(string genericName, [FromQuery] DrugRequestInputParameter parameter)
+        [HttpGet("genericName/{genericNameId}")]
+        public async Task<IActionResult> GetDrugsByGenericName(string genericNameId)
         {
-            var result = await _drugService.GetDrugsByGenericName(genericName, parameter);
-            return Ok(result);
+            var result = await _drugService.GetDrugsByGenericName(genericNameId);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.Data.Item2));
+            return Ok(result.Data.Item1);
+            
         }
 
 
 
         // GET api/<DrugController>/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDrugById(int id)
+        public async Task<IActionResult> GetDrugById(string id)
         {
             var result = await _drugService.GetDrugById(id);
             return Ok(result);
@@ -73,28 +79,42 @@ namespace PharmacyInventory_WebApi.Controllers
 
         // POST api/<DrugController>
         [HttpPost]
-        public async Task<IActionResult> CreateDrug([FromBody] DrugRequestDto requestDto)
+        public async Task<IActionResult> CreateDrug([FromForm] DrugRequestDto requestDto)
         {
             var result = await _drugService.CreateDrugAsync(requestDto);
             return Ok(result);
         }
 
         // PUT api/<DrugController>/5
-        [HttpPut("{UpdateDrug}")]
+        [HttpPut("UpdateDrug/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateDrug(int id, [FromBody] DrugRequestDto requestDto)
+        public async Task<IActionResult> UpdateDrug(string id, [FromBody] DrugRequestDto requestDto)
         {
             var result = await _drugService.UpdateDrug(id, requestDto);
             return Ok(result);
         }
 
         // DELETE api/<DrugController>/5
-        [HttpDelete("{DeleteDrugs}")]
+        [HttpDelete("DeleteDrugs/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteDrug(int id)
+        public async Task<IActionResult> DeleteDrug(string id)
         {
             var result = await _drugService.DeleteDrug(id);
             return Ok(result);
         }
+
+        //[HttpPost("check-low-quantity")]
+        //public async Task<IActionResult> CheckLowQuantityNotificationsAsync()
+        //{
+        //    await _drugService.CheckAndSendLowQuantityNotificationsAsync();
+        //    return Ok("Low quantity notifications sent.");
+        //}
+
+        //[HttpPost("check-expiring-drugs")]
+        //public async Task<IActionResult> CheckExpiringDrugNotificationsAsync()
+        //{
+        //    await _drugService.CheckAndSendExpiringDrugNotificationsAsync();
+        //    return Ok("Expiring drug notifications sent.");
+        //}
     }
 }

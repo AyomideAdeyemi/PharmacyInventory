@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/src/backend/PharmacyInventory_Domain/Dtos/Responses/ContactResponseDto.cs
+/src/backend/PharmacyInventory_WebApi/Controllers/WeatherForecastController.cs
+/src/backend/PharmacyInventory_Domain/Dtos/Responses/ContactResponseDto.cs

@@ -33,7 +33,7 @@ namespace PharmacyInventory_Application.Services.Implementations
 
         }
 
-        public async Task<StandardResponse<string>> DeleteUnit(int id)
+        public async Task<StandardResponse<string>> DeleteUnit(string id)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
-        public async Task<StandardResponse<UnitResponseDto>> UpdateUnit(int id, UnitRequestDto unitRequestDto)
+        public async Task<StandardResponse<UnitResponseDto>> UpdateUnit(string id, UnitRequestDto unitRequestDto)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
-        public async Task<StandardResponse<UnitResponseDto>> GetUnitById(int id)
+        public async Task<StandardResponse<UnitResponseDto>> GetUnitById(string id)
         {
             try
             {

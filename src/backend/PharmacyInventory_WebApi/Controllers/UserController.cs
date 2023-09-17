@@ -21,41 +21,41 @@ namespace PharmacyInventory_WebApi.Controllers
         }
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(int id)
+        public async Task<IActionResult> GetUserById(string id)
         {
             var result = await _userService.GetUserById(id);
             return Ok(result);
         }
 
-        // POST api/<UserController>
-        [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] UserRequestDto requestDto)
-        {
-            var result = await _userService.CreateUserAsync(requestDto);
-            return Ok(result);
-        }
+        //// POST api/<UserController>
+        //[HttpPost]
+        //public async Task<IActionResult> CreateUser([FromForm] UserRequestDto requestDto)
+        //{
+        //    var result = await _userService.CreateUserAsync(requestDto);
+        //    return Ok(result);
+        //}
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUser([FromQuery] UserRequestInputParameter parameter)
+        public async Task<IActionResult> GetAllUser([FromQuery]UserRequestInputParameter parameter)
         {
-            var result = await _userService.GetAllUsers(parameter);
+            var result = await _userService.GetAllUsersAsync(parameter);
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.Data.Item2));
             return Ok(result.Data.Item1);
         }
 
         // PUT api/<DrugController>/5
-        [HttpPut("{UpdateUser}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserRequestDto requestDto)
+        [HttpPut("UpdateUser{id}")]
+        //[Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateUser(string id, [FromForm] UserRequestDto requestDto)
         {
             var result = await _userService.UpdateUser(id, requestDto);
             return Ok(result);
         }
 
-        // DELETE api/<DrugController>/5
-        [HttpDelete("{DeleteUser}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteUser(int id)
+        // DELETE api/<DrugController
+        [HttpDelete("DeleteUser{id}")]
+       // [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteUser(string id)
         {
             var result = await _userService.DeleteUser(id);
             return Ok(result);

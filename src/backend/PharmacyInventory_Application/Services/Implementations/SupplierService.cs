@@ -18,6 +18,7 @@ namespace PharmacyInventory_Application.Services.Implementations
         private readonly IMapper _mapper;
 
 
+
         public SupplierService(IUnitOfWork unitOfWork, ILogger<Supplier> logger, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
@@ -37,10 +38,11 @@ namespace PharmacyInventory_Application.Services.Implementations
 
         }
 
-        public async Task<StandardResponse<(IEnumerable<SupplierResponseDto>, MetaData)>> GetAllSuppliers(SupplierRequestInputParameter parameter)
+        public async Task<StandardResponse<(IEnumerable<SupplierResponseDto>, MetaData)>> GetAllSuppliers()
         {
             try
             {
+                var parameter = new SupplierRequestInputParameter();
                 var suppliers = await _unitOfWork.Supplier.GetAllSupplier(parameter);
                 var suppliersDtos = _mapper.Map<IEnumerable<SupplierResponseDto>>(suppliers);
                 return StandardResponse<(IEnumerable<SupplierResponseDto> _contact, MetaData pagingData)>.Success("Successfully retrieved all suppliers", (suppliersDtos, suppliers.MetaData), 200);
@@ -53,7 +55,7 @@ namespace PharmacyInventory_Application.Services.Implementations
         }
 
 
-        public async Task<StandardResponse<string>> DeleteSupplier(int id)
+        public async Task<StandardResponse<string>> DeleteSupplier(string id)
         {
             try
             {
@@ -75,7 +77,7 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
-        public async Task<StandardResponse<SupplierResponseDto>> UpdateSupplier(int id, SupplierRequestDto supplierRequestDto)
+        public async Task<StandardResponse<SupplierResponseDto>> UpdateSupplier(string id, SupplierRequestDto supplierRequestDto)
         {
             try
             {
@@ -102,7 +104,7 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
-        public async Task<StandardResponse<SupplierResponseDto>> GetSupplierById(int id)
+        public async Task<StandardResponse<SupplierResponseDto>> GetSupplierById(string id)
         {
             try
             {

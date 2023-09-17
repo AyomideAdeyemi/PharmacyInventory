@@ -12,8 +12,8 @@ using PharmacyInventory_Infrastructure.Persistence;
 namespace PharmacyInventory_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230901144739_AddedRolesToDb")]
-    partial class AddedRolesToDb
+    [Migration("20230913141940_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,13 +54,13 @@ namespace PharmacyInventory_Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "39be6668-13ab-4a7d-a57e-ce171df9b97b",
+                            Id = "3c3fce0f-eb69-4c17-b20f-34e1749a95d1",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "06ab8eac-5d37-4aae-97f4-bbc2493ef886",
+                            Id = "51166bc5-66cf-46c1-bb14-d49e45ca57bd",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -212,18 +212,14 @@ namespace PharmacyInventory_Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DrugCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("ExpireDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("GenericNameId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ModifiedAt")
@@ -240,9 +236,11 @@ namespace PharmacyInventory_Infrastructure.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("SupplierId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UnitId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
@@ -492,15 +490,21 @@ namespace PharmacyInventory_Infrastructure.Migrations
 
                     b.HasOne("PharmacyInventory_Domain.Entities.GenericName", "GenericName")
                         .WithMany("Drugs")
-                        .HasForeignKey("GenericNameId");
+                        .HasForeignKey("GenericNameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PharmacyInventory_Domain.Entities.Supplier", "Supplier")
                         .WithMany("Drugs")
-                        .HasForeignKey("SupplierId");
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PharmacyInventory_Domain.Entities.Unit", "Unit")
                         .WithMany("Drugs")
-                        .HasForeignKey("UnitId");
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PharmacyInventory_Domain.Entities.User", null)
                         .WithMany("Drugs")

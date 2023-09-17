@@ -14,10 +14,10 @@ namespace PharmacyInventory_Application.Services.Interfaces
     public interface ISupplierService
     {
         Task<StandardResponse<SupplierResponseDto>> CreateSupplierAsync(SupplierRequestDto supplierRequestDto);
-        Task<StandardResponse<string>> DeleteSupplier(int id);
-        Task<StandardResponse<SupplierResponseDto>> UpdateSupplier(int id, SupplierRequestDto supplierRequestDto);
-        Task<StandardResponse<SupplierResponseDto>> GetSupplierById(int id);
-        Task<StandardResponse<(IEnumerable<SupplierResponseDto>, MetaData)>> GetAllSuppliers(SupplierRequestInputParameter parameter);
+        Task<StandardResponse<string>> DeleteSupplier(string id);
+        Task<StandardResponse<SupplierResponseDto>> UpdateSupplier(string id, SupplierRequestDto supplierRequestDto);
+        Task<StandardResponse<SupplierResponseDto>> GetSupplierById(string id);
+        Task<StandardResponse<(IEnumerable<SupplierResponseDto>, MetaData)>> GetAllSuppliers();
 
 
     }

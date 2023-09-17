@@ -14,7 +14,7 @@ namespace PharmacyInventory_Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new RoleConfigurations());
+          modelBuilder.ApplyConfiguration(new RoleConfigurations());
 
             base.OnModelCreating(modelBuilder);
         }

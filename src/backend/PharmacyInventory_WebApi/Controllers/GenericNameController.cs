@@ -8,7 +8,6 @@ using PharmacyInventory_Shared.RequestParameter.ModelParameters;
 using System.Data;
 using System.Text.Json;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace PharmacyInventory_WebApi.Controllers
 {
@@ -24,7 +23,7 @@ namespace PharmacyInventory_WebApi.Controllers
         }
         // GET api/<DrugController>/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetGenericNameById(int id)
+        public async Task<IActionResult> GetGenericNameById(string id)
         {
             var result = await _genericNameService.GetGenericNameById(id);
             return Ok(result);
@@ -32,34 +31,34 @@ namespace PharmacyInventory_WebApi.Controllers
 
         // GET: api/<GenericNameController>
         [HttpGet]
-        public async Task<IActionResult> GetAllGenericName([FromQuery] GenericNameRequestInputParameter parameter)
+        public async Task<IActionResult> GetAllGenericName()
         {
-            var result = await _genericNameService.GetAllUGenericName(parameter);
+            var result = await _genericNameService.GetAllGenericName();
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.Data.Item2));
             return Ok(result.Data.Item1);
         }
 
         // POST api/<DrugController>
         [HttpPost]
-        public async Task<IActionResult> CreateGenericName([FromBody] GenericNameRequestDto requestDto)
+        public async Task<IActionResult> CreateGenericName([FromForm] GenericNameRequestDto requestDto)
         {
             var result = await _genericNameService.CreateGenericNameAsync(requestDto);
             return Ok(result);
         }
 
         // PUT api/<DrugController>/5
-        [HttpPut("{UpdateGenericName}")]
+        [HttpPut("UpdateGenericName{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateGenericName(int id, [FromBody] GenericNameRequestDto requestDto)
+        public async Task<IActionResult> UpdateGenericName(string id, [FromBody] GenericNameRequestDto requestDto)
         {
             var result = await _genericNameService.UpdateGenericName(id, requestDto);
             return Ok(result);
         }
 
         // DELETE api/<DrugController>/5
-        [HttpDelete("{DeleteGenericName}")]
+        [HttpDelete("DeleteGenericName/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteGenericName(int id)
+        public async Task<IActionResult> DeleteGenericName(string id)
         {
             var result = await _genericNameService.DeleteGenericName(id);
             return Ok(result);

@@ -37,7 +37,7 @@ namespace PharmacyInventory_Application.Services.Implementations
 
         }
 
-        public async Task<StandardResponse<string>> DeleteBrand(int id)
+        public async Task<StandardResponse<string>> DeleteBrand(string id)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
-        public async Task<StandardResponse<BrandResponseDto>> UpdateBrand(int id, BrandRequestDto brandRequestDto)
+        public async Task<StandardResponse<BrandResponseDto>> UpdateBrand(string id, BrandRequestDto brandRequestDto)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
-        public async Task<StandardResponse<BrandResponseDto>> GetBrandById(int id)
+        public async Task<StandardResponse<BrandResponseDto>> GetBrandById(string id)
         {
             try
             {
@@ -105,11 +105,12 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
-        public async Task<StandardResponse<(IEnumerable<BrandResponseDto>, MetaData)>> GetAllBrands(BrandRequestInputParameter parameter)
+        public async Task<StandardResponse<(IEnumerable<BrandResponseDto>, MetaData)>> GetAllBrands()
         {
+            
             try
             {
-                var brands = await _unitOfWork.Brand.GetAllBrands(parameter);
+                var brands = await _unitOfWork.Brand.GetAllBrands();
                 var brandDtos = _mapper.Map<IEnumerable<BrandResponseDto>>(brands);
                 return StandardResponse<(IEnumerable<BrandResponseDto> _contact, MetaData pagingData)>.Success("Successfully retrieved all brands", (brandDtos, brands.MetaData), 200);
             }

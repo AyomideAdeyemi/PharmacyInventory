@@ -22,7 +22,7 @@ namespace PharmacyInventory_Infrastructure.Repository.Implementations
             _supplier = repositoryContext.Set<Supplier>();
         }
 
-        public async Task<Supplier> GetSupplierById(int id)
+        public async Task<Supplier> GetSupplierById(string id)
         {
             return await _supplier.FindAsync(id);
         }

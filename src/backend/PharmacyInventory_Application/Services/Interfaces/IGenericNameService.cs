@@ -14,10 +14,10 @@ namespace PharmacyInventory_Application.Services.Interfaces
     public interface IGenericNameService
     {
         Task<StandardResponse<GenericNameResponseDto>> CreateGenericNameAsync(GenericNameRequestDto genericNameRequestDto);
-        Task<StandardResponse<string>> DeleteGenericName(int id);
-        Task<StandardResponse<GenericNameResponseDto>> UpdateGenericName(int id, GenericNameRequestDto genericNameRequestDto);
-        Task<StandardResponse<GenericNameResponseDto>> GetGenericNameById(int id);
-        Task<StandardResponse<(IEnumerable<GenericNameResponseDto>, MetaData)>> GetAllUGenericName(GenericNameRequestInputParameter parameter);
+        Task<StandardResponse<string>> DeleteGenericName(string id);
+        Task<StandardResponse<GenericNameResponseDto>> UpdateGenericName(string id, GenericNameRequestDto genericNameRequestDto);
+        Task<StandardResponse<GenericNameResponseDto>> GetGenericNameById(string id);
+        Task<StandardResponse<(IEnumerable<GenericNameResponseDto>, MetaData)>> GetAllGenericName();
 
 
     }

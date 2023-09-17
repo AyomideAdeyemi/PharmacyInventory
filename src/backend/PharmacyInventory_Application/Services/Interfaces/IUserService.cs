@@ -8,16 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using PharmacyInventory_Shared.RequestParameter.Common;
 using PharmacyInventory_Shared.RequestParameter.ModelParameters;
+using PharmacyInventory_Domain.Entities;
 
 namespace PharmacyInventory_Application.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<StandardResponse<UserResponseDto>> CreateUserAsync(UserRequestDto userRequestDto);
-        Task<StandardResponse<string>> DeleteUser(int id);
-        Task<StandardResponse<UserResponseDto>> UpdateUser(int id, UserRequestDto userRequestDto);
-        Task<StandardResponse<UserResponseDto>> GetUserById(int id);
-        Task<StandardResponse<(IEnumerable<UserResponseDto>, MetaData)>> GetAllUsers(UserRequestInputParameter parameter);
+        Task<StandardResponse<string>> DeleteUser(string userId);
+        Task<StandardResponse<UserResponseDto>> UpdateUser(string id, UserRequestDto userRequestDto);
+        Task<StandardResponse<UserResponseDto>> GetUserById(string id);
+        //Task<PagedList<User>> GetAllUsersAsync();
+        // Task<StandardResponse<(IEnumerable<UserResponseDto>, MetaData)>> GetAllUsersAsync();
+        Task<StandardResponse<(IEnumerable<UserResponseDto>, MetaData)>> GetAllUsersAsync(UserRequestInputParameter parameter);
+
 
 
 

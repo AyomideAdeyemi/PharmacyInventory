@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmacyInventory_Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmacyInventory_WebApi", "src\backend\PharmacyInventory_WebApi\PharmacyInventory_WebApi.csproj", "{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyInventory_Shared", "src\backend\PharmacyInventory_Shared\PharmacyInventory_Shared.csproj", "{F4FB23CD-0588-4523-A608-208D03734625}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmacyInventory_Shared", "src\backend\PharmacyInventory_Shared\PharmacyInventory_Shared.csproj", "{F4FB23CD-0588-4523-A608-208D03734625}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyInventory_Test", "PharmacyInventory_Test\PharmacyInventory_Test.csproj", "{1C0D77E9-A887-4410-89D0-82B1972981A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{F4FB23CD-0588-4523-A608-208D03734625}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4FB23CD-0588-4523-A608-208D03734625}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4FB23CD-0588-4523-A608-208D03734625}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C0D77E9-A887-4410-89D0-82B1972981A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C0D77E9-A887-4410-89D0-82B1972981A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C0D77E9-A887-4410-89D0-82B1972981A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C0D77E9-A887-4410-89D0-82B1972981A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +60,7 @@ Global
 		{591FD789-156A-4F41-81D1-889C58506AEF} = {63602C55-D905-4914-BD2D-49348AB3160A}
 		{CAC5B2AB-7169-4EA8-BEA4-3B9555AF69BD} = {63602C55-D905-4914-BD2D-49348AB3160A}
 		{F4FB23CD-0588-4523-A608-208D03734625} = {63602C55-D905-4914-BD2D-49348AB3160A}
+		{1C0D77E9-A887-4410-89D0-82B1972981A1} = {63602C55-D905-4914-BD2D-49348AB3160A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {76F9EE6D-D56A-49A2-8747-196E457101A1}

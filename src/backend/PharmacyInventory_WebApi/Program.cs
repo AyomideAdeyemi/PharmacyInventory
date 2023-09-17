@@ -10,11 +10,12 @@ var logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
     .CreateLogger();
-builder.Services.ConfigureJWT(builder.Configuration);
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
+builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
+builder.Services.ConfigureSwaggerAuth();
 builder.Services.DependencyInjection();
 builder.Services.AddAutoMapper(typeof(MapInitializers));
 builder.Services.AddControllers();
@@ -35,7 +36,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseSwaggerUI(s =>
+{
+    s.SwaggerEndpoint("/swagger/v1/swagger.json", "Ayomide API v1");
+    s.SwaggerEndpoint("/swagger/v2/swagger.json", "Ayomide API v2");
+});
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
