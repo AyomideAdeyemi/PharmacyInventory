@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using PharmacyInventory_Application.Services.Interfaces;
 using PharmacyInventory_Domain.Dtos;
 using PharmacyInventory_Domain.Dtos.Requests;
 using PharmacyInventory_Domain.Dtos.Responses;
 using PharmacyInventory_Domain.Entities;
-using PharmacyInventory_Infrastructure.Repository.Abstractions;
 using PharmacyInventory_Infrastructure.UnitOfWorkManager;
 using PharmacyInventory_Shared.RequestParameter.Common;
 using PharmacyInventory_Shared.RequestParameter.ModelParameter;
@@ -18,63 +18,18 @@ namespace PharmacyInventory_Application.Services.Implementations
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<Drug> _logger;
         private readonly IMapper _mapper;
-       // private readonly IEmail _emailService;/// <summary>
+        private readonly IPhotoService _photoService;
+       
         
-        /// </summary>
-        /// <param name="unitOfWork"></param>
-        /// <param name="logger"></param>
-        /// <param name="mapper"></param>
-        /// <param name="email"></param>
-        
-
-
-
-
-        public DrugService(IUnitOfWork unitOfWork, ILogger<Drug> logger, IMapper mapper)
+        public DrugService(IUnitOfWork unitOfWork, ILogger<Drug> logger, IMapper mapper, IPhotoService photoService)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
+            _photoService = photoService;
             
         }
-        //public async Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetAllDrugs()
-        //{
-        //    try
-        //    {
-        //        var parameter = new DrugRequestInputParameter();
-        //        var drugs = await _unitOfWork.Drug.GetAllDrugs(parameter);
-
-        //        if (drugs == null)
-        //        {
-        //            // Return an error response if the database is null
-        //            return StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>
-        //                .Failed("Database is not available.", 500);
-        //        }
-
-        //        //var parameter = new DrugRequestInputParameter();
-        //        //var drugs = await _unitOfWork.Drug.GetAllDrugs(parameter);
-
-        //        if (drugs == null)
-        //        {
-        //            // Return an error response if the result is null
-        //            return StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>
-        //                .Failed("No drugs found.", 404);
-        //        }
-
-        //        var drugDtos = _mapper.Map<IEnumerable<DrugResponseDto>>(drugs);
-
-        //        var metaData = drugs.MetaData; // Assuming MetaData is a property of the drugs collection.
-
-        //        return StandardResponse<(IEnumerable<DrugResponseDto> _contact, MetaData pagingData)>
-        //            .Success("Successfully retrieved all drugs", (drugDtos, metaData), 200);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "An error occurred while getting all drugs.");
-        //        return StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>
-        //            .Failed("An error occurred while getting all drugs.", 500);
-        //    }
-        //}
+       
         public async Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetAllDrugs()
         {
             var parameter = new DrugRequestInputParameter();
@@ -108,6 +63,23 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
+        public async Task<StandardResponse<(bool, string)>> UploadProfileImageAsync(string Id, IFormFile file)
+        {
+            var result = await _unitOfWork.Drug.GetdrugById(Id);
+            if (result is null)
+            {
+                _logger.LogWarning($"No drug with id {Id}");
+                return StandardResponse<(bool, string)>.Failed("No drug found", 406);
+            }
+            var drug = _mapper.Map<Drug>(result);
+            string url = _photoService.AddPhoto(file);
+            if (string.IsNullOrWhiteSpace(url))
+                return StandardResponse<(bool, string)>.Failed("Failed to upload", 500);
+            drug.ImageUrl = url;
+            _unitOfWork.Drug.Update(drug);
+            await _unitOfWork.SaveAsync();
+            return StandardResponse<(bool, string)>.Success("Successfully uploaded image", (true, url), 204);
+        }
         public async Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetDrugsByBrand(string brandId)
         {
             try

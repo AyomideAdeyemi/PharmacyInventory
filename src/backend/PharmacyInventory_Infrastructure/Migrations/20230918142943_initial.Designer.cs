@@ -12,7 +12,7 @@ using PharmacyInventory_Infrastructure.Persistence;
 namespace PharmacyInventory_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230913141940_initial")]
+    [Migration("20230918142943_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace PharmacyInventory_Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -54,13 +54,13 @@ namespace PharmacyInventory_Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3c3fce0f-eb69-4c17-b20f-34e1749a95d1",
+                            Id = "40972614-443c-4acd-a491-a01ab5c84903",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "51166bc5-66cf-46c1-bb14-d49e45ca57bd",
+                            Id = "8903f54d-fb36-4e17-98af-224f3fac683a",
                             Name = "User",
                             NormalizedName = "USER"
                         });

@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using PharmacyInventory_Application.Services.Interfaces;
+using PharmacyInventory_Domain.Dtos;
 using PharmacyInventory_Domain.Dtos.Requests;
+using PharmacyInventory_Domain.Dtos.Responses;
 using PharmacyInventory_Domain.Entities;
+using PharmacyInventory_Infrastructure.UnitOfWorkManager;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -22,7 +25,7 @@ namespace PharmacyInventory_Application.Services.Implementations
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
-
+      
         private User? _user;
 
         public AuthenticationService(ILogger<AuthenticationService> logger, IMapper mapper, UserManager<User> userManager, IConfiguration configuration, IEmailService emailService)
@@ -31,62 +34,40 @@ namespace PharmacyInventory_Application.Services.Implementations
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
-            _emailService = emailService;
-
+       
 
         }
 
-       
+
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             var users = await _userManager.Users.ToListAsync();
             return users;
         }
-       
-       
-public async Task<string> RegisteriUser(UserRequestDto userRequestDto)
+
+
+        public async Task<StandardResponse<string>> RegisterUser(UserRequestDto requestDto)
         {
-            var user = _mapper.Map<User>(userRequestDto);
-            user.UserName = user.Email;
-
-            var result = await _userManager.CreateAsync(user, userRequestDto.Password);
-
-            if (result.Succeeded)
+            var userEmail = await _userManager.FindByEmailAsync(requestDto.Email);
+            if (userEmail != null)
             {
-                await _userManager.AddToRoleAsync(user, "User");
-
-                var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                return emailConfirmationToken;
+                return StandardResponse<string>.Failed($"User with this {requestDto.Email} already exist. Kindly choose another one to proceed");
             }
-
-            return null; // Registration failed, return null or handle the error as needed
+            User user = _mapper.Map<User>(requestDto);
+            user.UserName = requestDto.Email;
+            IdentityResult result = await _userManager.CreateAsync(user, requestDto.Password);
+            if (result.Succeeded)
+            
+                {
+                    await _userManager.AddToRoleAsync(user, "Admin");
+                }
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                return StandardResponse<string>.Success("success", token);
+            
         }
 
-
-        public async Task<string> RegisterUser(UserRequestDto userRequestDto)
-        {
-            var user = _mapper.Map<User>(userRequestDto);
-            user.UserName = user.Email;
-            var result = await _userManager.CreateAsync(user, userRequestDto.Password);
-            if (result.Succeeded)
-            {
-                await _userManager.AddToRoleAsync(user, "User");
-
-                // Generate email confirmation token
-                ////var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-                // Compose email
-                //string subject = "Welcome to Pharmacy Inventory";
-                //string body = $"Thank you for registering with Pharmacy Inventory. Please confirm your email by clicking the following link: <a href=\"{{confirmationLink}}\">Confirm Email</a>";
-                //body = body.Replace("{{confirmationLink}}", $"http://yourdomain.com/confirm-email?email={user.Email}&token={WebUtility.UrlEncode(emailConfirmationToken)}");
-
-                // Send email
-               // _emailService.SendEmail(user.Email, subject, body);
-            }
-            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        }
-    
-    public async Task<IdentityResult> RegisterAdmin(UserRequestDto userRequestDto)
+       
+        public async Task<string> RegisterAdmin(UserRequestDto userRequestDto)
         {
 
             var user = _mapper.Map<User>(userRequestDto);
@@ -96,7 +77,7 @@ public async Task<string> RegisteriUser(UserRequestDto userRequestDto)
             {
                 await _userManager.AddToRoleAsync(user, "Admin");
             }
-            return result;
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
         }
 
         public async Task<bool> ValidateUser(UserLoginDto userLoginDto)
@@ -160,6 +141,35 @@ public async Task<string> RegisteriUser(UserRequestDto userRequestDto)
             return await _userManager.GenerateEmailConfirmationTokenAsync(user);
         }
 
+        public async Task<string> ResetPassword(string token, UserLoginDto requestDto)
+        {
+            string trimedToken = token.Replace(" ", "+");
+            User user = await _userManager.FindByEmailAsync(requestDto.Email);
+
+            if (user == null)
+            {
+                return "User not found";
+            }
+
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, trimedToken, requestDto.Password);
+
+            if (result.Succeeded)
+            {
+                return "Password reset successful";
+            }
+            else
+            {
+                string errors = string.Empty;
+                foreach (var error in result.Errors)
+                {
+                    errors += error.Description.TrimEnd('.') + ", ";
+                }
+
+                return "Password reset failed: " + errors.TrimEnd(',', ' ');
+            }
+        }
+
+
         public async Task<string> ConfirmEmailAddress(string email, string token)
         {
             string trimmedToken = token.Replace(" ", "+");
@@ -189,14 +199,109 @@ public async Task<string> RegisteriUser(UserRequestDto userRequestDto)
 
         public void SendConfirmationEmail(string email, string callback_url)
         {
-           // string logoUrl = "https://res.cloudinary.com/djbkvjfxi/image/upload/v1694601350/uf4xfoda2c4z0exly8nx.png";
+            // string logoUrl = "https://res.cloudinary.com/djbkvjfxi/image/upload/v1694601350/uf4xfoda2c4z0exly8nx.png";
             string title = "DropMate Confirm Your Email";
-          //  string body = $"<html><body><br/><br/>Please click to confirm your email address for DropMate Delivery. When you confirm your email you get full access to DropMate services for free.<p/> <a href={callback_url}>Verify Your Email</a> <p/><br/>DropMate is a game-changing delivery platform designed to simplify your life. Say goodbye to the hassles of traditional delivery services and experience a whole new level of convenience. Whether you need groceries, packages, or your favorite takeout, DropMate connects you with a network of reliable couriers who are ready to pick up and drop off your items with lightning speed. With real-time tracking, secure payments, and a seamless user interface, DropMate ensures that your deliveries are not only efficient but also stress-free. It's time to embrace a smarter way to send and receive goods – it's time for DropMate.<p/><br/><br/>With Love from the DropMate Team<p/>Thank you for choosing DropMate.<p/><img src={logoUrl}></body></html>";
+            //  string body = $"<html><body><br/><br/>Please click to confirm your email address for DropMate Delivery. When you confirm your email you get full access to DropMate services for free.<p/> <a href={callback_url}>Verify Your Email</a> <p/><br/>DropMate is a game-changing delivery platform designed to simplify your life. Say goodbye to the hassles of traditional delivery services and experience a whole new level of convenience. Whether you need groceries, packages, or your favorite takeout, DropMate connects you with a network of reliable couriers who are ready to pick up and drop off your items with lightning speed. With real-time tracking, secure payments, and a seamless user interface, DropMate ensures that your deliveries are not only efficient but also stress-free. It's time to embrace a smarter way to send and receive goods – it's time for DropMate.<p/><br/><br/>With Love from the DropMate Team<p/>Thank you for choosing DropMate.<p/><img src={logoUrl}></body></html>";
             string body = $"<html><body><br/><br/>Please click to confirmccess to" +
-                $" DropMate services for free.<p/> <a href={callback_url}>Verify Your Email</a> <p/><br/>DropMate is  Sace a whole new level ofer way to send and receive goods – it's time for DropMate.<p/><br/><br/>With Love from the DropMate Team<p/>Thank you for choosing DropMate.</body></html>";
+                $" DropMate services for free.<p/> <a href={callback_url}>Verify Your Email</a> <p/><br/>DropMaods – it's time forpMate.<p/><br/><br/>With Lo the DropMate Team<p/>Thank yoing DropMate.</body></html>";
 
             _emailService.SendEmail(email, title, body);
         }
+
+        public async Task<StandardResponse<(string, UserResponseDto)>> ValidateAndCreateToken(UserLoginDto requestDto)
+        {
+            User user = await _userManager.FindByEmailAsync(requestDto.Email);
+            bool result = await _userManager.CheckPasswordAsync(user, requestDto.Password);
+            if (!result)
+            {
+                return StandardResponse<(string, UserResponseDto)>.Failed("An error occurred while getting all brand.", 500);
+
+            }
+            if (!(await _userManager.IsEmailConfirmedAsync(user)))
+                return StandardResponse<(string, UserResponseDto)>.Failed("Email not yet confirm. Check your inbox", 500);
+            string token = await CreateToken(user);
+            UserResponseDto userDto = _mapper.Map<UserResponseDto>(user);
+            return StandardResponse<(string, UserResponseDto)>.Success("Successful", (token, userDto));
+        }
+        private async Task<string> CreateToken(User user)
+        {
+            SigningCredentials signingCredentials = GetServerSigningCredentials();
+            List<Claim> claims = await GetClaims(user);
+            JwtSecurityToken tokenOptions = GenerateTokenOptions(signingCredentials, claims);
+            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        }
+        private SigningCredentials GetServerSigningCredentials()
+        {
+            string envSecret = Environment.GetEnvironmentVariable("SECRET");
+            byte[] key = Encoding.UTF8.GetBytes(envSecret);
+            var secret = new SymmetricSecurityKey(key);
+            return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
+        }
+        private async Task<List<Claim>> GetClaims(User user)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                 new Claim(ClaimTypes.Name,user.UserName),
+                 new Claim(ClaimTypes.NameIdentifier, user.Id)
+            };
+            IList<string> roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+            return claims;
+        }
+
+        public async Task<string> GeneratePasswordResetToken(string email)
+        {
+            User user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return "User not found";
+            }
+
+            return await _userManager.GeneratePasswordResetTokenAsync(user);
+        }
+
+        public async Task<string> ChangePassword(string email, ChangePasswordRequestDto requestDto)
+        {
+            User user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return "User not found";
+            }
+
+            IdentityResult result = await _userManager.ChangePasswordAsync(user, requestDto.OldPassword, requestDto.NewPassword);
+
+            if (result.Succeeded)
+            {
+                return "Password changed successfully";
+            }
+            else
+            {
+                string errors = string.Empty;
+                foreach (var error in result.Errors)
+                {
+                    errors += error.Description.TrimEnd('.') + ", ";
+                }
+
+                return "Password change failed: " + errors.TrimEnd(',', ' ');
+            }
+        }
+
+        public void SendResetPasswordEmail(string email, string callback_url)
+        {
+            string logoUrl = "https://res.cloudinary.com/djbkvjfxi/image/upload/v1694601350/uf4xfoda2c4z0exly8nx.png";
+            string title = "DropMate Reset Password";
+            string body = $"<html><body><br/><br/>We hope to protect it.<p/>Please click on the link to reset your password. <p/> <a href={callback_url}>Reset Your Password</a> <p/><p/>DropMate is time for DropMate.<p/><br/><br/>With Love from the DropMate Team<p/>Thank you for choosing DropMate.<p/><img src={logoUrl}></body></html>";
+            _emailService.SendEmail(email, title, body);
+        }
+       
+            
+        
+
     }
 }
 

@@ -285,8 +285,8 @@ namespace PharmacyInventory_Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "3c3fce0f-eb69-4c17-b20f-34e1749a95d1", null, "Admin", "ADMIN" },
-                    { "51166bc5-66cf-46c1-bb14-d49e45ca57bd", null, "User", "USER" }
+                    { "40972614-443c-4acd-a491-a01ab5c84903", null, "Admin", "ADMIN" },
+                    { "8903f54d-fb36-4e17-98af-224f3fac683a", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(

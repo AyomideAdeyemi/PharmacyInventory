@@ -23,5 +23,6 @@ namespace PharmacyInventory_Infrastructure.Persistence
         public DbSet<Unit> unit { get; set; }
         public DbSet<Supplier> supplier { get; set; }
         public DbSet<GenericName> genericName { get; set; }
+        public DbSet<User> user { get; set; }
     }
 }

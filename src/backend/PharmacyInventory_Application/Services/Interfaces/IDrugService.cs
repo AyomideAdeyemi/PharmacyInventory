@@ -1,4 +1,5 @@
-﻿using PharmacyInventory_Domain.Dtos;
+﻿using Microsoft.AspNetCore.Http;
+using PharmacyInventory_Domain.Dtos;
 using PharmacyInventory_Domain.Dtos.Requests;
 using PharmacyInventory_Domain.Dtos.Responses;
 using PharmacyInventory_Shared.RequestParameter.Common;
@@ -17,6 +18,7 @@ namespace PharmacyInventory_Application.Services.Interfaces
         Task<StandardResponse<DrugResponseDto>> GetDrugById(string id);
         Task<StandardResponse<DrugResponseDto>> UpdateDrug(string id, DrugRequestDto drugRequestDto);
         Task<StandardResponse<string>> DeleteDrug(string id);
+        Task<StandardResponse<(bool, string)>> UploadProfileImageAsync(string Id, IFormFile file);
         //Task CheckAndSendLowQuantityNotificationsAsync();
         //Task CheckAndSendExpiringDrugNotificationsAsync();
 

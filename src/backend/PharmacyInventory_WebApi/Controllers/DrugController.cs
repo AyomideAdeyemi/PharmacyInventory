@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PharmacyInventory_Application.Services.Interfaces;
 using PharmacyInventory_Domain.Dtos.Requests;
-using PharmacyInventory_Shared.RequestParameter.ModelParameters;
 using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -25,7 +24,7 @@ namespace PharmacyInventory_WebApi.Controllers
         public async Task<IActionResult> GetAllDrugs()
         {
             var result = await _drugService.GetAllDrugs();
-           Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.Data.Item2));
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.Data.Item2));
             return Ok(result.Data.Item1);
         }
 
@@ -37,7 +36,16 @@ namespace PharmacyInventory_WebApi.Controllers
             return Ok(result.Data.Item1);
 
         }
-
+        [HttpPost("Id/{id}")]
+        public IActionResult UploadProfileImageAsync(string id, [FromQuery] IFormFile file)
+        {
+            var result = _drugService.UploadProfileImageAsync(id, file);
+            if (result.Result.Succeeded)
+            {
+                return Ok(new { ImageUrl = result.Result.Data.Item2 });
+            }
+            return NotFound();
+        }
 
         // GET: api/<DrugController>
         [HttpGet("brand/{brandId}")]
