@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmacyInventory_WebApi", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmacyInventory_Shared", "src\backend\PharmacyInventory_Shared\PharmacyInventory_Shared.csproj", "{F4FB23CD-0588-4523-A608-208D03734625}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyInventory_Test", "PharmacyInventory_Test\PharmacyInventory_Test.csproj", "{1C0D77E9-A887-4410-89D0-82B1972981A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmacyInventory_Test", "PharmacyInventory_Test\PharmacyInventory_Test.csproj", "{1C0D77E9-A887-4410-89D0-82B1972981A1}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{22C6F507-BD1E-4DC0-9DF5-D329D896886D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{1C0D77E9-A887-4410-89D0-82B1972981A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C0D77E9-A887-4410-89D0-82B1972981A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C0D77E9-A887-4410-89D0-82B1972981A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22C6F507-BD1E-4DC0-9DF5-D329D896886D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22C6F507-BD1E-4DC0-9DF5-D329D896886D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22C6F507-BD1E-4DC0-9DF5-D329D896886D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22C6F507-BD1E-4DC0-9DF5-D329D896886D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

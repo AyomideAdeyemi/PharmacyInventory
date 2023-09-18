@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  pharmacyinventory_webapi:
+    image: ${DOCKER_REGISTRY-}pharmacyinventorywebapi
+    build:
+      context: .
+      dockerfile: src\backend\PharmacyInventory_WebApi\Dockerfile
