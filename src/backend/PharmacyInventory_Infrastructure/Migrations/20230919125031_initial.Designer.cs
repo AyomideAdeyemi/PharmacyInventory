@@ -12,7 +12,7 @@ using PharmacyInventory_Infrastructure.Persistence;
 namespace PharmacyInventory_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230918142943_initial")]
+    [Migration("20230919125031_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -54,13 +54,13 @@ namespace PharmacyInventory_Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "40972614-443c-4acd-a491-a01ab5c84903",
+                            Id = "35f2c53f-07c3-4cd0-8153-dd52633be307",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8903f54d-fb36-4e17-98af-224f3fac683a",
+                            Id = "39e40ea6-bfc2-4cb4-a533-e81e1b30abc3",
                             Name = "User",
                             NormalizedName = "USER"
                         });

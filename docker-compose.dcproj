@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Windows</DockerTargetOS>
-    <ProjectGuid>22c6f507-bd1e-4dc0-9df5-d329d896886d</ProjectGuid>
+    <ProjectGuid>cf13b359-f36d-4966-b02c-e7af70286995</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://{ServiceIPAddress}{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>pharmacyinventory_webapi</DockerServiceName>

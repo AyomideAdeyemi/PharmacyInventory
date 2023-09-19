@@ -51,13 +51,13 @@ namespace PharmacyInventory_Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "51190b7d-f8c0-4c50-9ea8-945bb791d289",
+                            Id = "35f2c53f-07c3-4cd0-8153-dd52633be307",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "58b55347-7845-41a0-a2cf-2345e9af2f1f",
+                            Id = "39e40ea6-bfc2-4cb4-a533-e81e1b30abc3",
                             Name = "User",
                             NormalizedName = "USER"
                         });
