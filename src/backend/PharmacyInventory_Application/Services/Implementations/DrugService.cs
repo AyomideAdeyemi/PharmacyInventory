@@ -80,6 +80,23 @@ namespace PharmacyInventory_Application.Services.Implementations
             await _unitOfWork.SaveAsync();
             return StandardResponse<(bool, string)>.Success("Successfully uploaded image", (true, url), 204);
         }
+
+        public async Task<StandardResponse<IEnumerable<DrugResponseDto>>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity)
+        {
+            try
+            {
+                var drugsFromDb = await _unitOfWork.Drug.GetDrugsByQuantityRange(minQuantity, maxQuantity);
+                var drugDto = _mapper.Map<IEnumerable<DrugResponseDto>>(drugsFromDb);
+
+                return StandardResponse<IEnumerable<DrugResponseDto>>.Success("Successfully retrieved drugs by quantity range", drugDto, 200);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting drugs by quantity range.");
+                return StandardResponse<IEnumerable<DrugResponseDto>>.Failed("An error occurred while getting drugs by quantity range.", 500);
+            }
+        }
+
         public async Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetDrugsByBrand(string brandId)
         {
             try
@@ -149,7 +166,7 @@ namespace PharmacyInventory_Application.Services.Implementations
             try
             {
                 await _unitOfWork.Drug.Create(drug);
-                _unitOfWork.SaveAsync();
+               await  _unitOfWork.SaveAsync();
 
                 var drugDto = _mapper.Map<DrugResponseDto>(drug);
                 return StandardResponse<DrugResponseDto>.Success("Successfully created new drug", drugDto, 201);

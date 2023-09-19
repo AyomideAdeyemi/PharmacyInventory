@@ -92,20 +92,13 @@ namespace PharmacyInventory_Infrastructure.Repository.Implementations
             return new PagedList<Drug>(result, count, parameter.PageNumber, parameter.PageSize);
         }
 
-
-        public async Task<List<Drug>> GetLowQuantityDrugsAsync(double threshold)
+        public async Task<IEnumerable<Drug>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity)
         {
             return await _drugs
-                .Where(d => d.Quantity < threshold)
+                .Where(d => d.Quantity >= minQuantity && d.Quantity <= maxQuantity)
                 .ToListAsync();
         }
-
-        public async Task<List<Drug>> GetExpiringDrugsAsync(DateTime expiryDate)
-        {
-            return await _drugs
-                .Where(d => d.ExpireDate >= DateTime.Now && d.ExpireDate <= expiryDate)
-                .ToListAsync();
-        }
+      
 
     }
 

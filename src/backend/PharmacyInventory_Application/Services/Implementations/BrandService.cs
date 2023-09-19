@@ -26,12 +26,12 @@ namespace PharmacyInventory_Application.Services.Implementations
             _mapper = mapper;
 
         }
-
+       
         public async Task<StandardResponse<BrandResponseDto>> CreateBrandAsync(BrandRequestDto brandRequestDto)
         {
             var brand = _mapper.Map<Brand>(brandRequestDto);
             await _unitOfWork.Brand.Create(brand);
-             _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
             var brandDto = _mapper.Map<BrandResponseDto>(brand);
             return StandardResponse<BrandResponseDto>.Success("Successfully created new brand", brandDto, 201);
 

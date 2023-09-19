@@ -46,7 +46,18 @@ namespace PharmacyInventory_WebApi.Controllers
             }
             return NotFound();
         }
+        [HttpGet("quantity-range")]
+        public async Task<IActionResult> GetDrugsByQuantityRange([FromQuery] double minQuantity, [FromQuery] double maxQuantity)
+        {
+            var result = await _drugService.GetDrugsByQuantityRange(minQuantity, maxQuantity);
 
+            if (result.Succeeded)
+            {
+                return Ok(result.Data);
+            }
+
+            return StatusCode(result.StatusCode, result.Message);
+        }
         // GET: api/<DrugController>
         [HttpGet("brand/{brandId}")]
         public async Task<IActionResult> GetDrugsByBrand(string brandId)
@@ -96,7 +107,7 @@ namespace PharmacyInventory_WebApi.Controllers
         // PUT api/<DrugController>/5
         [HttpPut("UpdateDrug/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateDrug(string id, [FromBody] DrugRequestDto requestDto)
+        public async Task<IActionResult> UpdateDrug(string id, [FromForm] DrugRequestDto requestDto)
         {
             var result = await _drugService.UpdateDrug(id, requestDto);
             return Ok(result);
@@ -111,18 +122,6 @@ namespace PharmacyInventory_WebApi.Controllers
             return Ok(result);
         }
 
-        //[HttpPost("check-low-quantity")]
-        //public async Task<IActionResult> CheckLowQuantityNotificationsAsync()
-        //{
-        //    await _drugService.CheckAndSendLowQuantityNotificationsAsync();
-        //    return Ok("Low quantity notifications sent.");
-        //}
-
-        //[HttpPost("check-expiring-drugs")]
-        //public async Task<IActionResult> CheckExpiringDrugNotificationsAsync()
-        //{
-        //    await _drugService.CheckAndSendExpiringDrugNotificationsAsync();
-        //    return Ok("Expiring drug notifications sent.");
-        //}
+          
     }
 }

@@ -25,16 +25,20 @@ namespace PharmacyInventory_Application.Services.Implementations
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
-      
+        private readonly IPhotoService _photoService;
+        private readonly IUnitOfWork _unitOfWork;
+
         private User? _user;
 
-        public AuthenticationService(ILogger<AuthenticationService> logger, IMapper mapper, UserManager<User> userManager, IConfiguration configuration, IEmailService emailService)
+        public AuthenticationService(ILogger<AuthenticationService> logger, IMapper mapper, UserManager<User> userManager, IConfiguration configuration, IEmailService emailService, IPhotoService photoService)
         {
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
-       
+            _emailService = emailService;
+            _photoService = photoService;
+
 
         }
 
@@ -66,7 +70,23 @@ namespace PharmacyInventory_Application.Services.Implementations
             
         }
 
-       
+        public async Task<StandardResponse<(bool, string)>> UploadProfileImageAsync(string Id, IFormFile file)
+        {
+            var result = await _unitOfWork.Drug.GetdrugById(Id);
+            if (result is null)
+            {
+                _logger.LogWarning($"No drug with id {Id}");
+                return StandardResponse<(bool, string)>.Failed("No drug found", 406);
+            }
+            var drug = _mapper.Map<Drug>(result);
+            string url = _photoService.AddPhoto(file);
+            if (string.IsNullOrWhiteSpace(url))
+                return StandardResponse<(bool, string)>.Failed("Failed to upload", 500);
+            drug.ImageUrl = url;
+            _unitOfWork.Drug.Update(drug);
+            await _unitOfWork.SaveAsync();
+            return StandardResponse<(bool, string)>.Success("Successfully uploaded image", (true, url), 204);
+        }
         public async Task<string> RegisterAdmin(UserRequestDto userRequestDto)
         {
 

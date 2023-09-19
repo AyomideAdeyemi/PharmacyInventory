@@ -41,15 +41,15 @@ namespace PharmacyInventory_WebApi.Controllers
 
         // POST api/<DrugController>
         [HttpPost]
-        public async Task<IActionResult> CreateBrand([FromBody] BrandRequestDto requestDto)
+        public async Task<IActionResult> CreateBrand([FromForm] BrandRequestDto requestDto)
         {
             var result = await _brandService.CreateBrandAsync(requestDto);
             return Ok(result);
         }
-
+       
         // PUT api/<DrugController>/5
         [HttpPut("UpdateBrand/{id}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateBrand(string id, [FromBody] BrandRequestDto requestDto)
         {
             var result = await _brandService.UpdateBrand(id, requestDto);
@@ -58,7 +58,7 @@ namespace PharmacyInventory_WebApi.Controllers
 
         // DELETE api/<DrugController>/5
         [HttpDelete("DeleteBrand{id}")]
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteBrand(string id)
         {
             var result = await _brandService.DeleteBrand(id);

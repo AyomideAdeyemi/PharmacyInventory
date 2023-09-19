@@ -19,8 +19,8 @@ namespace PharmacyInventory_Application.Services.Interfaces
         Task<StandardResponse<DrugResponseDto>> UpdateDrug(string id, DrugRequestDto drugRequestDto);
         Task<StandardResponse<string>> DeleteDrug(string id);
         Task<StandardResponse<(bool, string)>> UploadProfileImageAsync(string Id, IFormFile file);
-        //Task CheckAndSendLowQuantityNotificationsAsync();
-        //Task CheckAndSendExpiringDrugNotificationsAsync();
+        Task<StandardResponse<IEnumerable<DrugResponseDto>>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity);
+
 
 
 

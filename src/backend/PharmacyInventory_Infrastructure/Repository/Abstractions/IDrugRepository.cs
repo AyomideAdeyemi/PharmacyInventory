@@ -17,7 +17,8 @@ namespace PharmacyInventory_Infrastructure.Repository.Abstractions
         Task<PagedList<Drug>> GetDrugsBySupplier(string supplierId);
         Task<PagedList<Drug>> GetDrugsByExpiryDateRange(DateTime startDate, DateTime endDate);
         Task<Drug> GetdrugById(string id);
-        Task<List<Drug>> GetLowQuantityDrugsAsync(double threshold);
-        Task<List<Drug>> GetExpiringDrugsAsync(DateTime expiryDate);
+        Task<IEnumerable<Drug>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity);
+
+
     }
 }
