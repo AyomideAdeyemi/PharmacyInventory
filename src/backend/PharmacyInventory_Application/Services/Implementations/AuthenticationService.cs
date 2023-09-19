@@ -220,10 +220,10 @@ namespace PharmacyInventory_Application.Services.Implementations
         public void SendConfirmationEmail(string email, string callback_url)
         {
             // string logoUrl = "https://res.cloudinary.com/djbkvjfxi/image/upload/v1694601350/uf4xfoda2c4z0exly8nx.png";
-            string title = "DropMate Confirm Your Email";
+            string title = "PharmTech Confirm Your Email";
             //  string body = $"<html><body><br/><br/>Please click to confirm your email address for DropMate Delivery. When you confirm your email you get full access to DropMate services for free.<p/> <a href={callback_url}>Verify Your Email</a> <p/><br/>DropMate is a game-changing delivery platform designed to simplify your life. Say goodbye to the hassles of traditional delivery services and experience a whole new level of convenience. Whether you need groceries, packages, or your favorite takeout, DropMate connects you with a network of reliable couriers who are ready to pick up and drop off your items with lightning speed. With real-time tracking, secure payments, and a seamless user interface, DropMate ensures that your deliveries are not only efficient but also stress-free. It's time to embrace a smarter way to send and receive goods – it's time for DropMate.<p/><br/><br/>With Love from the DropMate Team<p/>Thank you for choosing DropMate.<p/><img src={logoUrl}></body></html>";
             string body = $"<html><body><br/><br/>Please click to confirmccess to" +
-                $" DropMate services for free.<p/> <a href={callback_url}>Verify Your Email</a> <p/><br/>DropMaods – it's time forpMate.<p/><br/><br/>With Lo the DropMate Team<p/>Thank yoing DropMate.</body></html>";
+                $" DropMate services for free.<p/> <a href={callback_url}>Verify Your Email</a> <p/><br/>PharmTech.<p/><br/><br/>With the PharmTech Team<p/>Thank you.</body></html>";
 
             _emailService.SendEmail(email, title, body);
         }
@@ -314,7 +314,7 @@ namespace PharmacyInventory_Application.Services.Implementations
         public void SendResetPasswordEmail(string email, string callback_url)
         {
             string logoUrl = "https://res.cloudinary.com/djbkvjfxi/image/upload/v1694601350/uf4xfoda2c4z0exly8nx.png";
-            string title = "DropMate Reset Password";
+            string title = "PharmTech Reset Password";
             string body = $"<html><body><br/><br/>We hope to protect it.<p/>Please click on the link to reset your password. <p/> <a href={callback_url}>Reset Your Password</a> <p/><p/>DropMate is time for DropMate.<p/><br/><br/>With Love from the DropMate Team<p/>Thank you for choosing DropMate.<p/><img src={logoUrl}></body></html>";
             _emailService.SendEmail(email, title, body);
         }

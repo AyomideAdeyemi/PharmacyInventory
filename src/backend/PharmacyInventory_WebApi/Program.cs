@@ -16,6 +16,7 @@ builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureSwaggerAuth();
+builder.Services.ConfigureCors();
 builder.Services.DependencyInjection();
 builder.Services.AddAutoMapper(typeof(MapInitializers));
 builder.Services.AddControllers();
@@ -36,6 +37,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("CorsPolicy");
 app.UseSwaggerUI(s =>
 {
     s.SwaggerEndpoint("/swagger/v1/swagger.json", "Ayomide API v1");

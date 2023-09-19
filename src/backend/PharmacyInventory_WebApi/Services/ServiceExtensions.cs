@@ -17,7 +17,16 @@ namespace PharmacyInventory_WebApi.Services
     public static class ServiceExtensions
     {
 
-
+        public static void ConfigureCors(this IServiceCollection services)
+        {
+            services.AddCors(option =>
+            {
+                option.AddPolicy("CorsPolicy", builder => builder
+                .AllowAnyHeader()
+                .AllowAnyOrigin()
+                .AllowAnyMethod());
+            });
+        }
         public static void DependencyInjection(this IServiceCollection services)
         {
             

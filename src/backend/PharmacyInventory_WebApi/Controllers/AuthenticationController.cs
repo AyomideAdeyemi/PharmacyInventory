@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace PharmacyInventory_WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/authentication")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -115,7 +115,7 @@ namespace PharmacyInventory_WebApi.Controllers
                                 font-size: 24px;
                                 color: #333333;
                                 margin-top: 10px;
-                            }/* Style for the ""Welcome to DropMate Delivery"" text */
+                            }/* Style for the ""Welcome to PharmTech Delivery"" text */
                             .dropmate-text {
                                 font-size: 28px;
                                 color: #333333;
