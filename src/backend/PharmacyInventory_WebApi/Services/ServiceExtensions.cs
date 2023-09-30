@@ -11,6 +11,7 @@ using PharmacyInventory_Infrastructure.Repository.Abstractions;
 using Microsoft.OpenApi.Models;
 using PharmacyInventory_WebApi.Properties;
 using PharmacyInventory_Infrastructure.Repository.Implementations;
+using System.Reflection;
 
 namespace PharmacyInventory_WebApi.Services
 {
@@ -29,7 +30,7 @@ namespace PharmacyInventory_WebApi.Services
         }
         public static void DependencyInjection(this IServiceCollection services)
         {
-            
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISupplierService, SupplierService>();
             services.AddScoped<IBrandService, BrandService>();
@@ -39,9 +40,9 @@ namespace PharmacyInventory_WebApi.Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUnitService, UnitService>();
             services.AddScoped<IDrugService, DrugService>();
-            services.AddScoped<IPhotoService, PhotoService>();
+            // services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IUserRepository, UserRepository>();
-          
+
 
         }
 
@@ -101,8 +102,9 @@ configuration)
                     BearerFormat = "JWT",
                     Scheme = "bearer"
                 });
-
-
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                opt.IncludeXmlComments(xmlPath);
 
                 opt.AddSecurityRequirement(new OpenApiSecurityRequirement
     {

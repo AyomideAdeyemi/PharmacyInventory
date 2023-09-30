@@ -11,13 +11,14 @@ namespace PharmacyInventory_Infrastructure.Repository.Abstractions
 {
     public interface IDrugRepository : IRepositoryBase<Drug>
     {
-        Task<PagedList<Drug>> GetDrugsByBrandId(string brandId);
-        Task<PagedList<Drug>> GetAllDrugs();
-        Task<PagedList<Drug>> GetDrugsByGenericNameId(string genericnameId);
-        Task<PagedList<Drug>> GetDrugsBySupplier(string supplierId);
-        Task<PagedList<Drug>> GetDrugsByExpiryDateRange(DateTime startDate, DateTime endDate);
-        Task<Drug> GetdrugById(string id);
+        Task<PagedList<Drug>> GetAllDrugs(DrugRequestInputParameter parameter);
+        Task<PagedList<Drug>> GetDrugsByGenericNameId(string genericNameId, DrugRequestInputParameter parameter);
+        Task<PagedList<Drug>> GetDrugsBySupplier(string supplierId, DrugRequestInputParameter parameter);
+        Task<PagedList<Drug>> GetDrugsByExpiryDateRange(DateTime startDate, DateTime endDate, DrugRequestInputParameter parameter);
+        Task<Drug> GetDrugById(string id);
         Task<IEnumerable<Drug>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity);
+        Task<PagedList<Drug>> GetDrugsByBrandId(string brandId, DrugRequestInputParameter parameter);
+
 
 
     }

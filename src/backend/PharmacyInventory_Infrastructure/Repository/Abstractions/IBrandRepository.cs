@@ -12,6 +12,6 @@ namespace PharmacyInventory_Infrastructure.Repository.Abstractions
     public interface IBrandRepository : IRepositoryBase<Brand>
     {
         Task<Brand> GetBrandById(string id);
-        Task<PagedList<Brand>> GetAllBrands();
+        Task<PagedList<Brand>> GetAllBrands(BrandRequestInputParameter parameter);
     }
 }

@@ -25,30 +25,22 @@ namespace PharmacyInventory_Application.Services.Implementations
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
-        private readonly IPhotoService _photoService;
+       
         private readonly IUnitOfWork _unitOfWork;
 
         private User? _user;
 
-        public AuthenticationService(ILogger<AuthenticationService> logger, IMapper mapper, UserManager<User> userManager, IConfiguration configuration, IEmailService emailService, IPhotoService photoService)
+        public AuthenticationService(ILogger<AuthenticationService> logger, IMapper mapper, UserManager<User> userManager, IConfiguration configuration, IEmailService emailService)
         {
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
             _emailService = emailService;
-            _photoService = photoService;
+            
 
 
         }
-
-
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
-        {
-            var users = await _userManager.Users.ToListAsync();
-            return users;
-        }
-
 
         public async Task<StandardResponse<string>> RegisterUser(UserRequestDto requestDto)
         {
@@ -63,41 +55,32 @@ namespace PharmacyInventory_Application.Services.Implementations
             if (result.Succeeded)
             
                 {
-                    await _userManager.AddToRoleAsync(user, "Admin");
+                    await _userManager.AddToRoleAsync(user, "User");
                 }
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 return StandardResponse<string>.Success("success", token);
             
         }
 
-        public async Task<StandardResponse<(bool, string)>> UploadProfileImageAsync(string Id, IFormFile file)
+        
+        public async Task<StandardResponse<string>> RegisterAdmin(UserRequestDto requestDto)
         {
-            var result = await _unitOfWork.Drug.GetdrugById(Id);
-            if (result is null)
+            var userEmail = await _userManager.FindByEmailAsync(requestDto.Email);
+            if (userEmail != null)
             {
-                _logger.LogWarning($"No drug with id {Id}");
-                return StandardResponse<(bool, string)>.Failed("No drug found", 406);
+                return StandardResponse<string>.Failed($"User with this {requestDto.Email} already exist. Kindly choose another one to proceed");
             }
-            var drug = _mapper.Map<Drug>(result);
-            string url = _photoService.AddPhoto(file);
-            if (string.IsNullOrWhiteSpace(url))
-                return StandardResponse<(bool, string)>.Failed("Failed to upload", 500);
-            drug.ImageUrl = url;
-            _unitOfWork.Drug.Update(drug);
-            await _unitOfWork.SaveAsync();
-            return StandardResponse<(bool, string)>.Success("Successfully uploaded image", (true, url), 204);
-        }
-        public async Task<string> RegisterAdmin(UserRequestDto userRequestDto)
-        {
-
-            var user = _mapper.Map<User>(userRequestDto);
-            user.UserName = user.Email;
-            var result = await _userManager.CreateAsync(user, userRequestDto.Password);
+            User user = _mapper.Map<User>(requestDto);
+            user.UserName = requestDto.Email;
+            IdentityResult result = await _userManager.CreateAsync(user, requestDto.Password);
             if (result.Succeeded)
+
             {
                 await _userManager.AddToRoleAsync(user, "Admin");
             }
-            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            return StandardResponse<string>.Success("success", token);
+
         }
 
         public async Task<bool> ValidateUser(UserLoginDto userLoginDto)
@@ -190,7 +173,7 @@ namespace PharmacyInventory_Application.Services.Implementations
         }
 
 
-        public async Task<string> ConfirmEmailAddress(string email, string token)
+        public async Task<StandardResponse<string>> ConfirmEmailAddress(string email, string token)
         {
             string trimmedToken = token.Replace(" ", "+");
 
@@ -198,22 +181,22 @@ namespace PharmacyInventory_Application.Services.Implementations
 
             if (user == null)
             {
-                return "User not found.";
+                return StandardResponse<string>.Failed( "User not found.", 500);
             }
 
             if (user.EmailConfirmed)
             {
-                return "Email is already confirmed.";
+                return StandardResponse<string>.Success("Email is already confirmed.",email, 201);
             }
 
             IdentityResult result = await _userManager.ConfirmEmailAsync(user, trimmedToken);
 
             if (!result.Succeeded)
             {
-                return "Error confirming email.";
+                return StandardResponse<string>.Failed("Error confirming email.", 500);
             }
 
-            return "Email confirmed successfully.";
+            return StandardResponse<string>.Success("Email confirmed successfully.", email, 201);
         }
 
 
@@ -222,8 +205,8 @@ namespace PharmacyInventory_Application.Services.Implementations
             // string logoUrl = "https://res.cloudinary.com/djbkvjfxi/image/upload/v1694601350/uf4xfoda2c4z0exly8nx.png";
             string title = "PharmTech Confirm Your Email";
             //  string body = $"<html><body><br/><br/>Please click to confirm your email address for DropMate Delivery. When you confirm your email you get full access to DropMate services for free.<p/> <a href={callback_url}>Verify Your Email</a> <p/><br/>DropMate is a game-changing delivery platform designed to simplify your life. Say goodbye to the hassles of traditional delivery services and experience a whole new level of convenience. Whether you need groceries, packages, or your favorite takeout, DropMate connects you with a network of reliable couriers who are ready to pick up and drop off your items with lightning speed. With real-time tracking, secure payments, and a seamless user interface, DropMate ensures that your deliveries are not only efficient but also stress-free. It's time to embrace a smarter way to send and receive goods – it's time for DropMate.<p/><br/><br/>With Love from the DropMate Team<p/>Thank you for choosing DropMate.<p/><img src={logoUrl}></body></html>";
-            string body = $"<html><body><br/><br/>Please click to confirmccess to" +
-                $" DropMate services for free.<p/> <a href={callback_url}>Verify Your Email</a> <p/><br/>PharmTech.<p/><br/><br/>With the PharmTech Team<p/>Thank you.</body></html>";
+            string body = $"<html><body><br/><br/>Please click to confirm access to your account" +
+                $" Welcome to PharmTech office space.<p/> <a href={callback_url}>Verify Your Email</a> <p/><br/>PharmTech.<p/><br/><br/>The PharmTech Team can't wait to meet you<p/>Thank you.</body></html>";
 
             _emailService.SendEmail(email, title, body);
         }
@@ -272,16 +255,18 @@ namespace PharmacyInventory_Application.Services.Implementations
             return claims;
         }
 
-        public async Task<string> GeneratePasswordResetToken(string email)
+        public async Task <StandardResponse<string>> GeneratePasswordResetToken(string email)
         {
             User user = await _userManager.FindByEmailAsync(email);
 
             if (user == null)
             {
-                return "User not found";
+                return StandardResponse<string>.Failed("User not found", 500);
             }
 
-            return await _userManager.GeneratePasswordResetTokenAsync(user);
+           // return await _userManager.GeneratePasswordResetTokenAsync(user);
+           var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            return StandardResponse<string>.Success("Success", token, 201);
         }
 
         public async Task<string> ChangePassword(string email, ChangePasswordRequestDto requestDto)

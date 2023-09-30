@@ -18,67 +18,32 @@ namespace PharmacyInventory_Application.Services.Implementations
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<Drug> _logger;
         private readonly IMapper _mapper;
-        private readonly IPhotoService _photoService;
+        
        
         
-        public DrugService(IUnitOfWork unitOfWork, ILogger<Drug> logger, IMapper mapper, IPhotoService photoService)
+        public DrugService(IUnitOfWork unitOfWork, ILogger<Drug> logger, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
-            _photoService = photoService;
+            
             
         }
        
-        public async Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetAllDrugs()
+        public async Task<StandardResponse<PagedList<DrugResponseDto>>> GetAllDrugs(DrugRequestInputParameter parameter)
         {
-            var parameter = new DrugRequestInputParameter();
             try
             {
-                
-                var drugs = await _unitOfWork.Drug.GetAllDrugs();
+                var drugs = await _unitOfWork.Drug.GetAllDrugs(parameter);
                 var drugsDtos = _mapper.Map<IEnumerable<DrugResponseDto>>(drugs);
-                return StandardResponse<(IEnumerable<DrugResponseDto> _contact, MetaData pagingData)>.Success("Successfully retrieved all drugs", (drugsDtos, drugs.MetaData), 200);
+               var pageList = new PagedList<DrugResponseDto>(drugsDtos.ToList(), drugs.MetaData.TotalCount, parameter.PageNumber, parameter.PageSize);
+                return StandardResponse<PagedList<DrugResponseDto>>.Success("Successfully retrieved all drugs", pageList, 200);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while getting all drugs.");
-                return StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>.Failed("An error occurred while getting all drugs.", 500);
+                return StandardResponse<PagedList<DrugResponseDto>>.Failed("An error occurred while getting all drugs.", 500);
             }
-        }
-
-        public async Task<StandardResponse<(IEnumerable<BrandResponseDto>, MetaData)>> GetAllBrands()
-        {
-            var parameter = new BrandRequestInputParameter();
-            try
-            {
-                var brands = await _unitOfWork.Brand.GetAllBrands();
-                var brandDtos = _mapper.Map<IEnumerable<BrandResponseDto>>(brands);
-                return StandardResponse<(IEnumerable<BrandResponseDto> _contact, MetaData pagingData)>.Success("Successfully retrieved all brands", (brandDtos, brands.MetaData), 200);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while getting all brands.");
-                return StandardResponse<(IEnumerable<BrandResponseDto>, MetaData)>.Failed("An error occurred while getting all brand.", 500);
-            }
-        }
-
-        public async Task<StandardResponse<(bool, string)>> UploadProfileImageAsync(string Id, IFormFile file)
-        {
-            var result = await _unitOfWork.Drug.GetdrugById(Id);
-            if (result is null)
-            {
-                _logger.LogWarning($"No drug with id {Id}");
-                return StandardResponse<(bool, string)>.Failed("No drug found", 406);
-            }
-            var drug = _mapper.Map<Drug>(result);
-            string url = _photoService.AddPhoto(file);
-            if (string.IsNullOrWhiteSpace(url))
-                return StandardResponse<(bool, string)>.Failed("Failed to upload", 500);
-            drug.ImageUrl = url;
-            _unitOfWork.Drug.Update(drug);
-            await _unitOfWork.SaveAsync();
-            return StandardResponse<(bool, string)>.Success("Successfully uploaded image", (true, url), 204);
         }
 
         public async Task<StandardResponse<IEnumerable<DrugResponseDto>>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity)
@@ -96,53 +61,57 @@ namespace PharmacyInventory_Application.Services.Implementations
                 return StandardResponse<IEnumerable<DrugResponseDto>>.Failed("An error occurred while getting drugs by quantity range.", 500);
             }
         }
-
-        public async Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetDrugsByBrand(string brandId)
+       
+        public async Task<StandardResponse<PagedList<DrugResponseDto>>> GetDrugsByBrandId(string brandId, DrugRequestInputParameter parameter)
         {
             try
-            { 
-                var drugsFromDb = await _unitOfWork.Drug.GetDrugsByBrandId(brandId);
-                var drugDto = _mapper.Map<IEnumerable<DrugResponseDto>>(drugsFromDb);
-
-                return StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>.Success("Successfully retrieved drugs by brand", (drugDto, drugsFromDb.MetaData), 200);
-            }
-             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while getting drugs by supplier.");
-                return StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>.Failed("An error occurred while getting drugs by supplier.", 500);
+                var drugs = await _unitOfWork.Drug.GetDrugsByBrandId(brandId, parameter);
+                var drugDtos = _mapper.Map<IEnumerable<DrugResponseDto>>(drugs);
+                var pagedList = new PagedList<DrugResponseDto>(drugDtos.ToList(), drugs.MetaData.TotalCount, parameter.PageNumber, parameter.PageSize);
+
+                return  StandardResponse<PagedList<DrugResponseDto>>.Success("Successfully retrieved drugs by brand.", pagedList, 200);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching drugs by brand ID");
+                return  StandardResponse<PagedList<DrugResponseDto>>.Failed("An error occurred while processing your request. Please try again later.", 500);
             }
         }
+    
+   
 
-       
-        public async Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetDrugsByGenericName(string genericNameId)
+
+    public async Task<StandardResponse<PagedList<DrugResponseDto>>> GetDrugsByGenericName(string genericNameId, DrugRequestInputParameter parameter)
         {
             try
             {
-              // var parameter = new GenericNameRequestInputParameter();
-                var drugs = await _unitOfWork.Drug.GetDrugsByGenericNameId(genericNameId);
+                var drugs = await _unitOfWork.Drug.GetDrugsByGenericNameId(genericNameId, parameter);
                 var drugDtos = _mapper.Map<IEnumerable<DrugResponseDto>>(drugs);
-                return StandardResponse<(IEnumerable<DrugResponseDto> _contact, MetaData pagingData)>.Success("Successfully retrieved drugs by genericName", (drugDtos, drugs.MetaData), 200);
+                var pagedList = new PagedList<DrugResponseDto>(drugDtos.ToList(),drugs.MetaData.TotalCount,parameter.PageNumber,parameter.PageSize);
+                return  StandardResponse<PagedList<DrugResponseDto>>.Success("Successfully retrieved drugs by genericName", pagedList, 200);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while getting drugs by genericName.");
-                return StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>.Failed("An error occurred while getting drugs by genericName.", 500);
+                return StandardResponse<PagedList<DrugResponseDto>>.Failed("An error occurred while getting drugs by genericName.", 500);
             }
         }
 
-        public async Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetDrugsBySupplier(string supplierId)
+        public async Task<StandardResponse<PagedList<DrugResponseDto>>> GetDrugsBySupplier(string supplierId, DrugRequestInputParameter parameter)
         {
             try
             {
                 
-                var drugFromDb = await _unitOfWork.Drug.GetDrugsBySupplier(supplierId);
+                var drugFromDb = await _unitOfWork.Drug.GetDrugsBySupplier(supplierId, parameter);
                 var drugDtos = _mapper.Map<IEnumerable<DrugResponseDto>>(drugFromDb);
-                return StandardResponse<(IEnumerable<DrugResponseDto> _contact, MetaData pagingData)>.Success("Successfully retrieved drugs by supplier", (drugDtos, drugFromDb.MetaData), 200);
+                var pageList = new PagedList<DrugResponseDto>(drugDtos.ToList(),drugFromDb.MetaData.TotalCount,parameter.PageNumber, parameter.PageSize);
+                return StandardResponse<PagedList<DrugResponseDto>>.Success("Successfully retrieved drugs by supplier",pageList, 200);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while getting drugs by supplier.");
-                return StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>.Failed("An error occurred while getting drugs by supplier.", 500);
+                return StandardResponse<PagedList<DrugResponseDto>>.Failed("An error occurred while getting drugs by supplier.", 500);
             }
         }
 
@@ -177,17 +146,12 @@ namespace PharmacyInventory_Application.Services.Implementations
                 return StandardResponse<DrugResponseDto>.Failed("Error occurred while creating the drug.", 500);
             }
         }
-
-
-      
-
-      
-       
-        public async Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetDrugsByExpiryDateRange(DateTime startDate, DateTime endDate)
+        
+        public async Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetDrugsByExpiryDateRange(DateTime startDate, DateTime endDate, DrugRequestInputParameter parameter)
         {
             try
             {
-                var drugs = await _unitOfWork.Drug.GetDrugsByExpiryDateRange(startDate, endDate);
+                var drugs = await _unitOfWork.Drug.GetDrugsByExpiryDateRange(startDate, endDate, parameter);
                 var drugDtos = _mapper.Map<IEnumerable<DrugResponseDto>>(drugs);
                 return StandardResponse<(IEnumerable<DrugResponseDto> _contact, MetaData pagingData)>.Success("Successfully retrieved drugs by expiry date range", (drugDtos, drugs.MetaData), 200);
             }
@@ -202,7 +166,7 @@ namespace PharmacyInventory_Application.Services.Implementations
         {
             try
             {
-                var drug = await _unitOfWork.Drug.GetdrugById(id);
+                var drug = await _unitOfWork.Drug.GetDrugById(id);
                 if (drug == null)
                 {
                     return StandardResponse<DrugResponseDto>.Failed("Drug not found.", 404);
@@ -221,7 +185,7 @@ namespace PharmacyInventory_Application.Services.Implementations
         {
             try
             {
-                var drug = await _unitOfWork.Drug.GetdrugById(id);
+                var drug = await _unitOfWork.Drug.GetDrugById(id);
                 if (drug == null)
                 {
                     return StandardResponse<string>.Failed("Drug not found.", 404);
@@ -243,7 +207,7 @@ namespace PharmacyInventory_Application.Services.Implementations
         {
             try
             {
-                var existingDrug = await _unitOfWork.Drug.GetdrugById(id);
+                var existingDrug = await _unitOfWork.Drug.GetDrugById(id);
                 if (existingDrug == null)
                 {
                     return StandardResponse<DrugResponseDto>.Failed("Drug not found.", 404);

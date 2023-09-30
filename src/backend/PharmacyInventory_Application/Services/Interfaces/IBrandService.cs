@@ -17,7 +17,7 @@ namespace PharmacyInventory_Application.Services.Interfaces
         Task<StandardResponse<string>> DeleteBrand(string id);
         Task<StandardResponse<BrandResponseDto>> UpdateBrand(string id, BrandRequestDto brandRequestDto);
         Task<StandardResponse<BrandResponseDto>> GetBrandById(string id);
-        Task<StandardResponse<(IEnumerable<BrandResponseDto>, MetaData)>> GetAllBrands();
+        Task<StandardResponse<PagedList<BrandResponseDto>>> GetAllBrands(BrandRequestInputParameter parameter);
 
 
     }

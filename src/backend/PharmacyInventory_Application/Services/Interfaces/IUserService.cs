@@ -17,9 +17,8 @@ namespace PharmacyInventory_Application.Services.Interfaces
         Task<StandardResponse<string>> DeleteUser(string userId);
         Task<StandardResponse<UserResponseDto>> UpdateUser(string id, UserRequestDto userRequestDto);
         Task<StandardResponse<UserResponseDto>> GetUserById(string id);
-        //Task<PagedList<User>> GetAllUsersAsync();
-        // Task<StandardResponse<(IEnumerable<UserResponseDto>, MetaData)>> GetAllUsersAsync();
-        Task<StandardResponse<(IEnumerable<UserResponseDto>, MetaData)>> GetAllUsersAsync(UserRequestInputParameter parameter);
+        Task<StandardResponse<PagedList<UserResponseDto>>> GetAllUsersAsync(UserRequestInputParameter parameter);
+
 
 
 

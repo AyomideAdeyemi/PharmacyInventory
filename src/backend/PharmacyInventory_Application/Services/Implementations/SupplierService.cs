@@ -38,19 +38,19 @@ namespace PharmacyInventory_Application.Services.Implementations
 
         }
 
-        public async Task<StandardResponse<(IEnumerable<SupplierResponseDto>, MetaData)>> GetAllSuppliers()
+        public async Task<StandardResponse<PagedList<SupplierResponseDto>>> GetAllSuppliers(SupplierRequestInputParameter parameter)
         {
             try
             {
-                var parameter = new SupplierRequestInputParameter();
                 var suppliers = await _unitOfWork.Supplier.GetAllSupplier(parameter);
                 var suppliersDtos = _mapper.Map<IEnumerable<SupplierResponseDto>>(suppliers);
-                return StandardResponse<(IEnumerable<SupplierResponseDto> _contact, MetaData pagingData)>.Success("Successfully retrieved all suppliers", (suppliersDtos, suppliers.MetaData), 200);
+                var pageList = new PagedList<SupplierResponseDto>(suppliersDtos.ToList(), suppliers.MetaData.TotalCount, parameter.PageNumber, parameter.PageSize);
+                return StandardResponse<PagedList<SupplierResponseDto>>.Success("Successfully retrieved all suppliers", pageList, 200);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while getting all suppliers.");
-                return StandardResponse<(IEnumerable<SupplierResponseDto>, MetaData)>.Failed("An error occurred while getting all suppliers.", 500);
+                return StandardResponse<PagedList<SupplierResponseDto>>.Failed("An error occurred while getting all suppliers.", 500);
             }
         }
 

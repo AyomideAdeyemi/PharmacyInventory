@@ -30,10 +30,8 @@ namespace PharmacyInventory_Infrastructure.Repository.Implementations
          
         public async Task<PagedList<Supplier>> GetAllSupplier(SupplierRequestInputParameter parameter)
         {
-            var result = await _supplier.Skip((parameter.PageNumber - 1) * parameter.PageSize)
-                .Take(parameter.PageSize).ToListAsync();
-            var count = await _supplier.CountAsync();
-            return new PagedList<Supplier>(result, count, parameter.PageNumber, parameter.PageSize);
+            var result =  _supplier.OrderBy(x => x.Name);
+            return await PagedList<Supplier>.GetPagination(result, parameter.PageNumber, parameter.PageSize);
 
         }
     }

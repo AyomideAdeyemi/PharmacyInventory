@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using PharmacyInventory_Application.Services.Implementations;
 using PharmacyInventory_Application.Services.Interfaces;
+using PharmacyInventory_Domain.Dtos;
 using PharmacyInventory_Domain.Dtos.Requests;
+using PharmacyInventory_Domain.Dtos.Responses;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using System.Reflection.PortableExecutable;
 using System.Security.Claims;
@@ -20,10 +23,20 @@ namespace PharmacyInventory_WebApi.Controllers
         {
             _authenticationService = authenticationService;  
         }
+        /// <summary>
+        /// Description: This EndPoint Register an ordinary user
+        /// </summary>
+        /// <param name="requestDto"></param>
+        /// <returns></returns>
 
-       
+
         [HttpPost("register")]
-       //[ServiceFilter(typeof(ValidationActionFilters))]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(StandardResponse<string>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status409Conflict)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable)]
+
         public async Task<IActionResult> RegisterUser([FromForm] UserRequestDto requestDto)
         {
             var response = await _authenticationService.RegisterUser(requestDto);
@@ -39,18 +52,46 @@ namespace PharmacyInventory_WebApi.Controllers
             return BadRequest(response);
         }
 
-        [HttpPost("register-admin")]
+
+        /// <summary>
+        /// Description: This EndPoint Register an Admin
+        /// </summary>
+        /// <param name="requestDto"></param>
+        /// <returns></returns>
+        [HttpPost("registerAdmin")]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(StandardResponse<string>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status409Conflict)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable)]
+
         public async Task<IActionResult> RegisterAdmin([FromForm] UserRequestDto requestDto)
         {
-            string token = await _authenticationService.RegisterAdmin(requestDto);
-            string encodedToken = System.Text.Encodings.Web.UrlEncoder.Default.Encode(token);
-            string callback_url = Request.Scheme + "://" + Request.Host + $"/api/authentication/confirm-email/{requestDto.Email}/{encodedToken}";
-            _authenticationService.SendConfirmationEmail(requestDto.Email, callback_url);
-            return StatusCode(201, "Account created successfully. Please confirm your email");
+            var response = await _authenticationService.RegisterAdmin(requestDto);
+            if (response.Succeeded)
+            {
+                var token = response.Data;
+                string encodedToken = System.Text.Encodings.Web.UrlEncoder.Default.Encode(token);
+                string callback_url = Request.Scheme + "://" + Request.Host + $"/api/authentication/confirm-email/{requestDto.Email}/{encodedToken}";
 
+                _authenticationService.SendConfirmationEmail(requestDto.Email, callback_url);
+                return StatusCode(201, "Account created successfully. Please confirm your email");
+            }
+            return BadRequest(response);
         }
 
+        /// <summary>
+        /// Description: This EndPoint To login
+        /// </summary>
+        /// <param name="requestDto"></param>
+        /// <returns></returns>
         [HttpPost("login")]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(StandardResponse<>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status409Conflict)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable)]
+
         public async Task<IActionResult> LoginUser([FromBody] UserLoginDto requestDto)
         {
             if (!await _authenticationService.ValidateUser(requestDto))
@@ -59,8 +100,18 @@ namespace PharmacyInventory_WebApi.Controllers
             }
             return Ok(new { token = await _authenticationService.CreateToken() });
         }
-
+        /// <summary>
+        /// Description: This EndPoint activate your  account  through your email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [HttpGet("Activate-email/{email}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(StandardResponse<string>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status409Conflict)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable)]
+
         public async Task<IActionResult> ActivateEmail(string email)
         {
             string token = await _authenticationService.GenerateEmailActivationToken(email);
@@ -72,8 +123,19 @@ namespace PharmacyInventory_WebApi.Controllers
             return StatusCode(200, "Email verification successfully sent. Please confirm your email");
 
         }
-
+        /// <summary>
+        /// Description: This EndPoint Confirm your email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpGet("confirm-email/{email}/{token}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(StandardResponse<string>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status409Conflict)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable)]
+
         public async Task<ContentResult> ConfirmEmail(string email, string token)
         {
             string decodedToken = WebUtility.UrlDecode(token);
@@ -132,8 +194,8 @@ namespace PharmacyInventory_WebApi.Controllers
                             <!-- ""Email Verified"" text -->
                             <div class=""verified-text"">Verified Successfully</div>
         
-                            <!-- ""Welcome to DropMate Delivery"" text -->
-                            <div class=""pharmacy-text"">Welcome to Ph </div>
+                            <!-- ""Welcome to PharmTech Delivery"" text -->
+                            <div class=""pharmacy-text"">Welcome to PharmTech </div>
                         </div>
                     </body>
                     </html>";
@@ -144,40 +206,40 @@ namespace PharmacyInventory_WebApi.Controllers
             };
         }
 
-        [HttpGet("forget-password/{email}")]
-        public async Task<IActionResult> ForgetPassword(string email)
-        {
-            string resetToken = await _authenticationService.GeneratePasswordResetToken(email);
+        //[HttpGet("forget-password/{email}")]
+        //public async Task<IActionResult> ForgetPassword(string email)
+        //{
+        //    string resetToken = await _authenticationService.GeneratePasswordResetToken(email);
 
-            string encodedToken = System.Text.Encodings.Web.UrlEncoder.Default.Encode(resetToken);
+        //    string encodedToken = System.Text.Encodings.Web.UrlEncoder.Default.Encode(resetToken);
 
-            //Change to call the frontend url for entering new password and resetting with this resetToken passed in the header
-            string callback_url = Request.Scheme + "://" + Request.Host + $"/api/authentication/confirm-email/{email}/{encodedToken}";//currently backend url
+        //    //Change to call the frontend url for entering new password and resetting with this resetToken passed in the header
+        //    string callback_url = Request.Scheme + "://" + Request.Host + $"/api/authentication/confirm-email/{email}/{encodedToken}";//currently backend url
 
-            _authenticationService.SendResetPasswordEmail(email, callback_url);
-            return StatusCode(200, "Password reset successfully sent to your email.");
+        //    _authenticationService.SendResetPasswordEmail(email, callback_url);
+        //    return StatusCode(200, "Password reset successfully sent to your email.");
 
-        }
+        //}
 
-        [HttpGet("reset-password/{token}")]
-        public async Task<IActionResult> ResetPassword(string token, [FromBody] UserLoginDto requestDto)
-        {
-            string decodedToken = WebUtility.UrlDecode(token);
+        //[HttpGet("reset-password/{token}")]
+        //public async Task<IActionResult> ResetPassword(string token, [FromBody] UserLoginDto requestDto)
+        //{
+        //    string decodedToken = WebUtility.UrlDecode(token);
 
-            await _authenticationService.ResetPassword(decodedToken, requestDto);
-            return Ok("Your password has been reset successfully");
-        }
+        //    await _authenticationService.ResetPassword(decodedToken, requestDto);
+        //    return Ok("Your password has been reset successfully");
+        //}
         
-        [HttpGet("change-password")]
-        //[Authorize]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto requestDto)
-        {
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            var userNameClaim = claimsIdentity.FindFirst(ClaimTypes.Name);
-            string email = userNameClaim.Value;
-            await _authenticationService.ChangePassword(email, requestDto);
-            return Ok("Your password has been changed successfully");
-        }
+        //[HttpGet("change-password")]
+        ////[Authorize]
+        //public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto requestDto)
+        //{
+        //    var claimsIdentity = User.Identity as ClaimsIdentity;
+        //    var userNameClaim = claimsIdentity.FindFirst(ClaimTypes.Name);
+        //    string email = userNameClaim.Value;
+        //    await _authenticationService.ChangePassword(email, requestDto);
+        //    return Ok("Your password has been changed successfully");
+        //}
 
     }
 }

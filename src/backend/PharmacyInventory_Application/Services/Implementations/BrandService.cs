@@ -105,19 +105,21 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
-        public async Task<StandardResponse<(IEnumerable<BrandResponseDto>, MetaData)>> GetAllBrands()
+
+        public async Task<StandardResponse<PagedList<BrandResponseDto>>> GetAllBrands(BrandRequestInputParameter parameter)
         {
-            
+
             try
             {
-                var brands = await _unitOfWork.Brand.GetAllBrands();
+                var brands = await _unitOfWork.Brand.GetAllBrands(parameter);
                 var brandDtos = _mapper.Map<IEnumerable<BrandResponseDto>>(brands);
-                return StandardResponse<(IEnumerable<BrandResponseDto> _contact, MetaData pagingData)>.Success("Successfully retrieved all brands", (brandDtos, brands.MetaData), 200);
+                var pageList = new PagedList<BrandResponseDto>(brandDtos.ToList(), brands.MetaData.TotalCount, parameter.PageNumber, parameter.PageSize);
+                return StandardResponse<PagedList<BrandResponseDto>>.Success("Successfully retrieved all brands", pageList, 200);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while getting all brands.");
-                return StandardResponse<(IEnumerable<BrandResponseDto>, MetaData)>.Failed("An error occurred while getting all brand.", 500);
+                return StandardResponse<PagedList<BrandResponseDto>>.Failed("An error occurred while getting all brand.", 500);
             }
         }
 
