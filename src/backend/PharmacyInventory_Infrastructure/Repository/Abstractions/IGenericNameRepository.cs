@@ -12,6 +12,6 @@ namespace PharmacyInventory_Infrastructure.Repository.Abstractions
     public interface IGenericNameRepository : IRepositoryBase<GenericName>
     {
         Task<GenericName> GetGenericNameById(string id);
-        Task<PagedList<GenericName>> GetAllGenericName();
+        Task<PagedList<GenericName>> GetAllGenericName(GenericNameRequestInputParameter parameter);
     }
 }

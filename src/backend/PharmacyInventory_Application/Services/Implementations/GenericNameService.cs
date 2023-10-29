@@ -104,19 +104,19 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
         }
 
-        public async Task<StandardResponse<(IEnumerable<GenericNameResponseDto>, MetaData)>> GetAllGenericName()
+        public async Task<StandardResponse<PagedList<GenericNameResponseDto>>> GetAllGenericName(GenericNameRequestInputParameter parameter)
         {
             try
             {
-               var parameter = new GenericNameRequestInputParameter();
-                var genericNames = await _unitOfWork.GenericName.GetAllGenericName();
+               var genericNames = await _unitOfWork.GenericName.GetAllGenericName(parameter);
                 var genericNameDtos = _mapper.Map<IEnumerable<GenericNameResponseDto>>(genericNames);
-                return StandardResponse<(IEnumerable<GenericNameResponseDto> _contact, MetaData pagingData)>.Success("Successfully retrieved all genericName", (genericNameDtos, genericNames.MetaData), 200);
+                var pagedList = new PagedList<GenericNameResponseDto>(genericNameDtos.ToList(), genericNames.MetaData.TotalCount, parameter.PageNumber, parameter.PageSize);
+                return StandardResponse<PagedList<GenericNameResponseDto>>.Success("Successfully retrieved all genericName", pagedList, 200);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while getting all genericNames.");
-                return StandardResponse<(IEnumerable<GenericNameResponseDto>, MetaData)>.Failed("An error occurred while getting all genericNames.", 500);
+                return StandardResponse <PagedList<GenericNameResponseDto>>.Failed("An error occurred while getting all genericNames.", 500);
             }
         }
 

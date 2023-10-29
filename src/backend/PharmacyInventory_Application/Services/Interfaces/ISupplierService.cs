@@ -17,7 +17,7 @@ namespace PharmacyInventory_Application.Services.Interfaces
         Task<StandardResponse<string>> DeleteSupplier(string id);
         Task<StandardResponse<SupplierResponseDto>> UpdateSupplier(string id, SupplierRequestDto supplierRequestDto);
         Task<StandardResponse<SupplierResponseDto>> GetSupplierById(string id);
-        Task<StandardResponse<(IEnumerable<SupplierResponseDto>, MetaData)>> GetAllSuppliers();
+        Task<StandardResponse<PagedList<SupplierResponseDto>>> GetAllSuppliers(SupplierRequestInputParameter parameter);
 
 
     }

@@ -17,7 +17,7 @@ namespace PharmacyInventory_Application.Services.Interfaces
         Task<StandardResponse<string>> DeleteGenericName(string id);
         Task<StandardResponse<GenericNameResponseDto>> UpdateGenericName(string id, GenericNameRequestDto genericNameRequestDto);
         Task<StandardResponse<GenericNameResponseDto>> GetGenericNameById(string id);
-        Task<StandardResponse<(IEnumerable<GenericNameResponseDto>, MetaData)>> GetAllGenericName();
+        Task<StandardResponse<PagedList<GenericNameResponseDto>>> GetAllGenericName(GenericNameRequestInputParameter parameter);
 
 
     }

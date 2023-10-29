@@ -10,16 +10,16 @@ namespace PharmacyInventory_Application.Services.Interfaces
     public interface IDrugService 
     {
         Task<StandardResponse<DrugResponseDto>> CreateDrugAsync(DrugRequestDto drugRequestDto);
-        Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetAllDrugs();
-        Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetDrugsByBrand(string brandId);
-        Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetDrugsByGenericName(string genericNameId);
-        Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetDrugsBySupplier(string supplierId);
-        Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetDrugsByExpiryDateRange(DateTime startDate, DateTime endDate);
+        Task<StandardResponse<PagedList<DrugResponseDto>>> GetAllDrugs(DrugRequestInputParameter parameter);
+        Task<StandardResponse<PagedList<DrugResponseDto>>> GetDrugsByGenericName(string genericNameId, DrugRequestInputParameter parameter);
+        Task<StandardResponse<PagedList<DrugResponseDto>>> GetDrugsBySupplier(string supplierId, DrugRequestInputParameter p);
+        Task<StandardResponse<(IEnumerable<DrugResponseDto>, MetaData)>> GetDrugsByExpiryDateRange(DateTime startDate, DateTime endDate, DrugRequestInputParameter parameter  );
         Task<StandardResponse<DrugResponseDto>> GetDrugById(string id);
         Task<StandardResponse<DrugResponseDto>> UpdateDrug(string id, DrugRequestDto drugRequestDto);
         Task<StandardResponse<string>> DeleteDrug(string id);
-        Task<StandardResponse<(bool, string)>> UploadProfileImageAsync(string Id, IFormFile file);
-        Task<StandardResponse<IEnumerable<DrugResponseDto>>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity);
+        Task<StandardResponse<IEnumerable<DrugResponseDto>>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity, DrugRequestInputParameter parameter);
+        Task<StandardResponse<PagedList<DrugResponseDto>>> GetDrugsByBrandId(string brandId, DrugRequestInputParameter parameter);
+
 
 
 

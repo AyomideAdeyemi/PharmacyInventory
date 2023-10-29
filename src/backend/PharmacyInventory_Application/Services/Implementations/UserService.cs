@@ -7,6 +7,7 @@ using PharmacyInventory_Domain.Dtos;
 using PharmacyInventory_Domain.Dtos.Requests;
 using PharmacyInventory_Domain.Dtos.Responses;
 using PharmacyInventory_Domain.Entities;
+using PharmacyInventory_Infrastructure.UnitOfWorkManager;
 using PharmacyInventory_Shared.RequestParameter.Common;
 using PharmacyInventory_Shared.RequestParameter.ModelParameters;
 
@@ -18,58 +19,35 @@ namespace PharmacyInventory_Application.Services.Implementations
         private readonly ILogger<User> _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
+        private readonly IUnitOfWork _unitOfWork;
        
 
-        public UserService(ILogger<User> logger, IMapper mapper, UserManager<User> userManager)
+        public UserService(ILogger<User> logger, IMapper mapper, UserManager<User> userManager, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<StandardResponse<(IEnumerable<UserResponseDto>, MetaData)>> GetAllUsersAsync(UserRequestInputParameter parameter)
+        public async Task<StandardResponse<PagedList<UserResponseDto>>> GetAllUsersAsync(UserRequestInputParameter parameter)
         {
             try
             {
-                var users = await _userManager.Users
-                    .Skip((parameter.PageNumber - 1) * parameter.PageSize)
-                    .Take(parameter.PageSize)
-                    .ToListAsync();
-
-                var totalUsersCount = await _userManager.Users.CountAsync();
-
+                var users = await _unitOfWork.User.GetAllUsers(parameter);
                 var userDtos = _mapper.Map<IEnumerable<UserResponseDto>>(users);
-
-                var metaData = new MetaData
-                {
-                    PageNumber = parameter.PageNumber,
-                    PageSize = parameter.PageSize,
-                    TotalCount = totalUsersCount,
-                    TotalPages = (int)Math.Ceiling((double)totalUsersCount / parameter.PageSize)
-                };
-
-                return StandardResponse<(IEnumerable<UserResponseDto>, MetaData)>.Success("Successfully retrieved all users", (userDtos, metaData), 200);
+                var pageList = new PagedList<UserResponseDto>(userDtos.ToList(), users.MetaData.TotalCount, parameter.PageNumber, parameter.PageSize);
+               
+                return StandardResponse<PagedList<UserResponseDto>>.Success("Successfully retrieved all users", pageList, 200);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while getting all users.");
-                return StandardResponse<(IEnumerable<UserResponseDto>, MetaData)>.Failed("An error occurred while getting all users.", 500);
+                return StandardResponse<PagedList<UserResponseDto>>.Failed("An error occurred while getting all users.", 500);
             }
         }
 
-        //public async Task<PagedList<User>> GetAllUsersAsync()
-        //{
-        //    var parameter = new UserRequestInputParameter();
-        //    var users = await _userManager.Users
-        //        .Skip((parameter.PageNumber - 1) * parameter.PageSize)
-        //        .Take(parameter.PageSize)
-        //        .ToListAsync();
-
-        //    var totalUsersCount = await _userManager.Users.CountAsync();
-
-        //    return new PagedList<User>(users, totalUsersCount, parameter.PageNumber, parameter.PageSize);
-        //}
-
+        
         public async Task<StandardResponse<string>> DeleteUser(string userId)
         {
             try
@@ -83,7 +61,7 @@ namespace PharmacyInventory_Application.Services.Implementations
                 var result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded)
                 {
-                    return StandardResponse<string>.Success("User deleted successfully.","Deleted", 200);
+                    return StandardResponse<string>.Success("User deleted successfully.",$"User with Id {userId} has been Deleted", 200);
                 }
 
                 return StandardResponse<string>.Failed("Unable to delete user.", 500);

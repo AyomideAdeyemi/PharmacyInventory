@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PharmacyInventory_Application.Services.Implementations;
 using PharmacyInventory_Application.Services.Interfaces;
+using PharmacyInventory_Domain.Dtos;
 using PharmacyInventory_Domain.Dtos.Requests;
+using PharmacyInventory_Domain.Dtos.Responses;
 using PharmacyInventory_Shared.RequestParameter.ModelParameter;
-using PharmacyInventory_Shared.RequestParameter.ModelParameters;
-using System.Data;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -23,42 +23,94 @@ namespace PharmacyInventory_WebApi.Controllers
             _brandService = brandService;
         }
 
-        // GET api/<DrugController>/5
+        /// <summary>
+        /// Description: This EndPoint get a brand by its Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(StandardResponse<BrandResponseDto>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status409Conflict)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable)]
+
         public async Task<IActionResult> GetBrandById(string id)
         {
             var result = await _brandService.GetBrandById(id);
             return Ok(result);
         }
-        
+        /// <summary>
+        /// Description: This EndPoint retrieve all brands from database.
+        /// </summary>
+        /// <returns>aA List of all brands</returns>
+       
         [HttpGet]
-        public async Task<IActionResult> GetAllBrands()
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(StandardResponse<IEnumerable<BrandResponseDto>>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status409Conflict)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable)]
+
+        public async Task<IActionResult> GetAllBrands([FromQuery]BrandRequestInputParameter parameter)
         {
-            var result = await _brandService.GetAllBrands();
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.Data.Item2));
-            return Ok(result.Data.Item1);
+            var result = await _brandService.GetAllBrands(parameter);
+           Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.Data.MetaData));
+            return StatusCode(result.StatusCode, result);
         }
 
-        // POST api/<DrugController>
+       
+        /// <summary>
+        /// Description: This EndPoint create a new Brand.
+        /// </summary>
+        /// <param name="requestDto"></param>
+        /// <returns></returns>
         [HttpPost]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(StandardResponse<BrandResponseDto>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status409Conflict)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable)]
+
         public async Task<IActionResult> CreateBrand([FromForm] BrandRequestDto requestDto)
         {
             var result = await _brandService.CreateBrandAsync(requestDto);
             return Ok(result);
         }
        
-        // PUT api/<DrugController>/5
+        /// <summary>
+        /// Description: This EndPoint update a brand by its Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="requestDto"></param>
+        /// <returns></returns>
         [HttpPut("UpdateBrand/{id}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(StandardResponse<BrandResponseDto>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status409Conflict)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable)]
+
         public async Task<IActionResult> UpdateBrand(string id, [FromBody] BrandRequestDto requestDto)
         {
             var result = await _brandService.UpdateBrand(id, requestDto);
             return Ok(result);
         }
 
-        // DELETE api/<DrugController>/5
+        /// <summary>
+        /// Description: This EndPoint deletes a brand by its Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("DeleteBrand{id}")]
-       // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(StandardResponse<BrandResponseDto>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status409Conflict)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable)]
+
         public async Task<IActionResult> DeleteBrand(string id)
         {
             var result = await _brandService.DeleteBrand(id);

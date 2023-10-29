@@ -4,6 +4,8 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <NoWarn>$(NoWarn);1591</NoWarn> 
     <UserSecretsId>89df89d1-260a-4ead-83c9-0a40b94f5293</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
@@ -19,10 +21,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
     <PackageReference Include="ServiceStack.Text" Version="6.10.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.6.3" />
   </ItemGroup>
 
   <ItemGroup>

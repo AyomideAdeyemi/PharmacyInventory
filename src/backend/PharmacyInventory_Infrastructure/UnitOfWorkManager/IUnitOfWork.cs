@@ -9,7 +9,7 @@ namespace PharmacyInventory_Infrastructure.UnitOfWorkManager
         IGenericNameRepository GenericName { get; }
         IBrandRepository Brand { get; }
         IUnitRepository Unit { get; }
-       // IUserRepository User { get; }
+        IUserRepository User { get; }
         Task SaveAsync();
     }
 }
