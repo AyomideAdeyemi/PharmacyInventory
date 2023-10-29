@@ -24,11 +24,9 @@ namespace PharmacyInventory_Infrastructure.Repository.Implementations
 
         public async Task<PagedList<Brand>> GetAllBrands(BrandRequestInputParameter parameter)
         {
-            var result = _brand.
-                OrderBy(x => x.Name);
-                return await PagedList<Brand>.GetPagination(result, parameter.PageNumber, parameter.PageSize);
+            var result = _brand. OrderBy(x => x.Name);
+            return await PagedList<Brand>.GetPagination(result, parameter.PageNumber, parameter.PageSize);
                
-           
         }
     }
 }

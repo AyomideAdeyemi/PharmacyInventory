@@ -1,14 +1,9 @@
-﻿using FluentAssertions.Common;
-using Microsoft.AspNetCore.Mvc;
-using PharmacyInventory_Application.Services.Implementations;
+﻿using Microsoft.AspNetCore.Mvc;
 using PharmacyInventory_Application.Services.Interfaces;
 using PharmacyInventory_Domain.Dtos;
 using PharmacyInventory_Domain.Dtos.Requests;
-using PharmacyInventory_Domain.Dtos.Responses;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
-using System.Reflection.PortableExecutable;
-using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,6 +18,14 @@ namespace PharmacyInventory_WebApi.Controllers
         {
             _authenticationService = authenticationService;  
         }
+
+        [HttpPost("ContactUs")]
+        public IActionResult SendContactMessage([FromForm] ContactUs contact)
+        {
+            _authenticationService.SendContactMessage(contact);
+            return Ok("Message sent successfully!");
+        }
+
         /// <summary>
         /// Description: This EndPoint Register an ordinary user
         /// </summary>

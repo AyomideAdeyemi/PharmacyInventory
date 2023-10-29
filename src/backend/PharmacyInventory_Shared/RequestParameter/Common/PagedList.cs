@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace PharmacyInventory_Shared.RequestParameter.Common
 {

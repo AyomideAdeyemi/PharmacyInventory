@@ -7,7 +7,6 @@ using PharmacyInventory_Domain.Entities;
 using PharmacyInventory_Infrastructure.UnitOfWorkManager;
 using Microsoft.Extensions.Logging;
 using PharmacyInventory_Shared.RequestParameter.Common;
-using PharmacyInventory_Shared.RequestParameter.ModelParameters;
 using PharmacyInventory_Shared.RequestParameter.ModelParameter;
 
 namespace PharmacyInventory_Application.Services.Implementations

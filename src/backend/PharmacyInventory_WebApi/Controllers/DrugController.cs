@@ -76,9 +76,9 @@ namespace PharmacyInventory_WebApi.Controllers
         [SwaggerResponse(StatusCodes.Status500InternalServerError)]
         [SwaggerResponse(StatusCodes.Status503ServiceUnavailable)]
 
-        public async Task<IActionResult> GetDrugsByQuantityRange([FromQuery] double minQuantity, [FromQuery] double maxQuantity)
+        public async Task<IActionResult> GetDrugsByQuantityRange([FromQuery] double minQuantity, [FromQuery] double maxQuantity, DrugRequestInputParameter parameter)
         {
-            var result = await _drugService.GetDrugsByQuantityRange(minQuantity, maxQuantity);
+            var result = await _drugService.GetDrugsByQuantityRange(minQuantity, maxQuantity, parameter);
 
             if (result.Succeeded)
             {

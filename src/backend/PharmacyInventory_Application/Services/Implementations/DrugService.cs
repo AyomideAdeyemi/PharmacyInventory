@@ -41,18 +41,19 @@ namespace PharmacyInventory_Application.Services.Implementations
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("Processing completed successfully." + " " + ex.ToString());
                 _logger.LogError(ex, "An error occurred while getting all drugs.");
                 return StandardResponse<PagedList<DrugResponseDto>>.Failed("An error occurred while getting all drugs.", 500);
             }
         }
 
-        public async Task<StandardResponse<IEnumerable<DrugResponseDto>>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity)
+        public async Task<StandardResponse<IEnumerable<DrugResponseDto>>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity, DrugRequestInputParameter parameter )
         {
             try
             {
-                var drugsFromDb = await _unitOfWork.Drug.GetDrugsByQuantityRange(minQuantity, maxQuantity);
+                var drugsFromDb = await _unitOfWork.Drug.GetDrugsByQuantityRange(minQuantity, maxQuantity, parameter);
                 var drugDto = _mapper.Map<IEnumerable<DrugResponseDto>>(drugsFromDb);
-
+                _logger.LogInformation("Successfully retrieve all data");
                 return StandardResponse<IEnumerable<DrugResponseDto>>.Success("Successfully retrieved drugs by quantity range", drugDto, 200);
             }
             catch (Exception ex)
@@ -67,8 +68,8 @@ namespace PharmacyInventory_Application.Services.Implementations
             try
             {
                 var drugs = await _unitOfWork.Drug.GetDrugsByBrandId(brandId, parameter);
-                var drugDtos = _mapper.Map<IEnumerable<DrugResponseDto>>(drugs);
-                var pagedList = new PagedList<DrugResponseDto>(drugDtos.ToList(), drugs.MetaData.TotalCount, parameter.PageNumber, parameter.PageSize);
+                var drugDto = _mapper.Map<IEnumerable<DrugResponseDto>>(drugs);
+                var pagedList = new PagedList<DrugResponseDto>(drugDto.ToList(), drugs.MetaData.TotalCount, parameter.PageNumber, parameter.PageSize);
 
                 return  StandardResponse<PagedList<DrugResponseDto>>.Success("Successfully retrieved drugs by brand.", pagedList, 200);
             }

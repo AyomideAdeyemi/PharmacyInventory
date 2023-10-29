@@ -24,50 +24,46 @@ namespace PharmacyInventory_Infrastructure.Repository.Implementations
         
         public async Task<PagedList<Drug>> GetAllDrugs(DrugRequestInputParameter parameter)
         {
-            var result =  _drugs
-                .OrderBy(e => e.Name);
-            return await PagedList<Drug>.GetPagination(result, parameter.PageNumber, parameter.PageSize);
+           // var result =  _drugs.OrderBy(e => e.Name);
+            return await PagedList<Drug>.GetPagination(_drugs.OrderBy(e => e.Name), parameter.PageNumber, parameter.PageSize);
 
         }
         public async Task<PagedList<Drug>> GetDrugsByBrandId(string brandId, DrugRequestInputParameter parameter)
         {
-            var result = _drugs.Where(e => e.BrandId.ToLower().Contains(brandId))
-                .OrderBy(e => e.Name);
-            return await PagedList<Drug>.GetPagination(result, parameter.PageNumber, parameter.PageSize);
+           // var result = _drugs.Where(e => e.BrandId.ToLower().Contains(brandId)).OrderBy(e => e.Name);
+            return await PagedList<Drug>.GetPagination(_drugs.Where(e => e.BrandId.ToLower().Contains(brandId)).OrderBy(e => e.Name), parameter.PageNumber, parameter.PageSize);
         }
        
      
         public async Task<PagedList<Drug>> GetDrugsByGenericNameId(string genericNameId, DrugRequestInputParameter parameter)
         {
 
-            var result = _drugs.Where(c => c.GenericNameId.ToLower().Contains(genericNameId))
-                .OrderBy(c => c.Name);
-            return await PagedList<Drug>.GetPagination(result, parameter.PageNumber, parameter.PageSize);
+            //var result = _drugs.Where(c => c.GenericNameId.ToLower().Contains(genericNameId)).OrderBy(c => c.Name);
+            return await PagedList<Drug>.GetPagination(_drugs.Where(c => c.GenericNameId.ToLower().Contains(genericNameId)).OrderBy(c => c.Name), parameter.PageNumber, parameter.PageSize);
         }
 
         public async Task<PagedList<Drug>> GetDrugsBySupplier(string supplierId, DrugRequestInputParameter parameter)
         {
-            var result = _drugs.Where(c => c.SupplierId.ToLower().Contains(supplierId))
-                .OrderBy(c => c.Name);
-            return await PagedList<Drug>.GetPagination(result, parameter.PageNumber, parameter.PageSize);
+           // var result = _drugs.Where(c => c.SupplierId.ToLower().Contains(supplierId)) .OrderBy(c => c.Name);
+            return await PagedList<Drug>.GetPagination(_drugs.Where(c => c.SupplierId.ToLower().Contains(supplierId)).OrderBy(c => c.Name), parameter.PageNumber, parameter.PageSize);
         }
 
 
         public async Task<PagedList<Drug>> GetDrugsByExpiryDateRange(DateTime startDate, DateTime endDate, DrugRequestInputParameter parameter)
         {
-            var result = _drugs.Where(drug => drug.ExpireDate >= startDate && drug.ExpireDate <= endDate);
-            return await PagedList<Drug>.GetPagination(result, parameter.PageNumber, parameter.PageSize);
+           // var result = _drugs.Where(drug => drug.ExpireDate >= startDate && drug.ExpireDate <= endDate);
+            return await PagedList<Drug>.GetPagination(_drugs.Where(drug => drug.ExpireDate >= startDate && drug.ExpireDate <= endDate), parameter.PageNumber, parameter.PageSize);
         }
 
-        public async Task<IEnumerable<Drug>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity)
+        public async Task<PagedList<Drug>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity, DrugRequestInputParameter parameter)
         {
-            return await _drugs
-                .Where(d => d.Quantity >= minQuantity && d.Quantity <= maxQuantity)
-                .ToListAsync();
+           // var result =  _drugs.Where(d => d.Quantity >= minQuantity && d.Quantity <= maxQuantity).OrderBy(c=> c.Name);
+            return await PagedList<Drug>.GetPagination(_drugs.Where(d => d.Quantity >= minQuantity && d.Quantity <= maxQuantity).OrderBy(c => c.Name), parameter.PageNumber, parameter.PageSize);
+                
         }
-       
 
 
+      
     }
 
 }

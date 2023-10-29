@@ -5,6 +5,7 @@ namespace PharmacyInventory_Application.Services.Interfaces
 {
     public interface IAuthenticationService
     {
+        void SendContactMessage(ContactUs contact);
         Task<StandardResponse<string>> RegisterUser(UserRequestDto requestDto);
         Task<bool> ValidateUser(UserLoginDto userLoginDto);
         Task<string> CreateToken();

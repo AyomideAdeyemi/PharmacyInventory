@@ -17,7 +17,7 @@ namespace PharmacyInventory_Application.Services.Interfaces
         Task<StandardResponse<DrugResponseDto>> GetDrugById(string id);
         Task<StandardResponse<DrugResponseDto>> UpdateDrug(string id, DrugRequestDto drugRequestDto);
         Task<StandardResponse<string>> DeleteDrug(string id);
-        Task<StandardResponse<IEnumerable<DrugResponseDto>>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity);
+        Task<StandardResponse<IEnumerable<DrugResponseDto>>> GetDrugsByQuantityRange(double minQuantity, double maxQuantity, DrugRequestInputParameter parameter);
         Task<StandardResponse<PagedList<DrugResponseDto>>> GetDrugsByBrandId(string brandId, DrugRequestInputParameter parameter);
 
 

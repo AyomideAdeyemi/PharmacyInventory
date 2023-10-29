@@ -12,6 +12,7 @@ using PharmacyInventory_Domain.Dtos.Responses;
 using PharmacyInventory_Domain.Entities;
 using PharmacyInventory_Infrastructure.UnitOfWorkManager;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 
@@ -42,6 +43,23 @@ namespace PharmacyInventory_Application.Services.Implementations
 
         }
 
+        public void SendContactMessage(ContactUs contact)
+        {
+            // string toAddress = "ayomidechinonso@gmail.com"; // Replace with your contact email address
+            string toAddress = contact.Email;
+            string subject = "BookShare";
+            string body = $"Hello {contact.Name}<br>Thank you for reaching out to us, your message <br>({ contact.Message}) <br>has been received, as you hold on, kindly go through our About us page we promise to reply you as soon as possible ";
+            try
+            {
+                _emailService.SendEmail(toAddress, subject, body);
+                
+            }
+            catch (Exception ex)
+            {
+                // Handle any errors (log, throw, etc.)
+                throw new Exception("An error occurred while sending the message.", ex);
+            }
+        }
         public async Task<StandardResponse<string>> RegisterUser(UserRequestDto requestDto)
         {
             var userEmail = await _userManager.FindByEmailAsync(requestDto.Email);
