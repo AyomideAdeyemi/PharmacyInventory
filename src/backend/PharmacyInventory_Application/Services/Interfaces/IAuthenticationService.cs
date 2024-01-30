@@ -17,6 +17,8 @@ namespace PharmacyInventory_Application.Services.Interfaces
         Task<string> GenerateEmailActivationToken(string email);
         Task<StandardResponse<string>> ConfirmEmailAddress(string email, string token);
         Task<StandardResponse<string>> RegisterAdmin(UserRequestDto requestDto);
+        Task<StandardResponse<string>> PromoteToAdminAsync(string userId);
+
 
 
     }

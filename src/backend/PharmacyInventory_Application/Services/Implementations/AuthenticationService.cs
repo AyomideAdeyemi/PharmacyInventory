@@ -101,6 +101,25 @@ namespace PharmacyInventory_Application.Services.Implementations
 
         }
 
+        public async Task<StandardResponse<string>> PromoteToAdminAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return StandardResponse<string>.Failed($"User with Id {userId} not found.", 404);
+            }
+
+            // Check if the user is not already in the "Admin" role
+            if (!await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                await _userManager.AddToRoleAsync(user, "Admin");
+                return StandardResponse<string>.Success("User promoted to Admin successfully.", "Success", 200);
+            }
+
+            return StandardResponse<string>.Failed("User is already an Admin.", 400);
+        }
+
         public async Task<bool> ValidateUser(UserLoginDto userLoginDto)
         {
             _user = await _userManager.FindByEmailAsync(userLoginDto.Email);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PharmacyInventory_Application.Services.Implementations;
 using PharmacyInventory_Application.Services.Interfaces;
 using PharmacyInventory_Domain.Dtos;
 using PharmacyInventory_Domain.Dtos.Requests;
@@ -55,7 +56,6 @@ namespace PharmacyInventory_WebApi.Controllers
             return BadRequest(response);
         }
 
-
         /// <summary>
         /// Description: This EndPoint Register an Admin
         /// </summary>
@@ -81,6 +81,23 @@ namespace PharmacyInventory_WebApi.Controllers
                 return StatusCode(201, "Account created successfully. Please confirm your email");
             }
             return BadRequest(response);
+        }
+
+        /// <summary>
+        /// Description: This EndPoint Register an already registered User to an Admin
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpPost("promote-to-admin/{userId}")]
+        [SwaggerResponse(StatusCodes.Status200OK, Type = typeof(StandardResponse<string>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status409Conflict)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        [SwaggerResponse(StatusCodes.Status503ServiceUnavailable)]
+        public async Task<IActionResult> PromoteToAdmin(string userId)
+        {
+            var result = await _authenticationService.PromoteToAdminAsync(userId);
+            return StatusCode(result.StatusCode, result);
         }
 
         /// <summary>
