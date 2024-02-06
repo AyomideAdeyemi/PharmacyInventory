@@ -47,7 +47,7 @@ namespace PharmacyInventory_Application.Services.Implementations
         {
             // string toAddress = "ayomidechinonso@gmail.com"; // Replace with your contact email address
             string toAddress = contact.Email;
-            string subject = "BookShare";
+            string subject = "PharmTech";
             string body = $"Hello {contact.Name}<br>Thank you for reaching out to us, your message <br>({ contact.Message}) <br>has been received, as you hold on, kindly go through our About us page we promise to reply you as soon as possible ";
             try
             {
