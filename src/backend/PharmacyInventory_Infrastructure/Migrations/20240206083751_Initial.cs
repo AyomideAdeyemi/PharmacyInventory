@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PharmacyInventory_Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -285,8 +285,8 @@ namespace PharmacyInventory_Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "6375ac17-3b3a-4fb1-bb04-f79103aa6ed5", null, "Admin", "ADMIN" },
-                    { "f4d170f4-eba8-44c5-b068-1b2e1d87eb79", null, "User", "USER" }
+                    { "3c945ce2-6708-4384-8b34-50c7779722ef", null, "Admin", "ADMIN" },
+                    { "d72eae0d-ed56-4f0c-b095-a78141343473", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(

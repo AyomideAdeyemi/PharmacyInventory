@@ -12,8 +12,8 @@ using PharmacyInventory_Infrastructure.Persistence;
 namespace PharmacyInventory_Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230920105553_initial")]
-    partial class initial
+    [Migration("20240206083751_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,13 +54,13 @@ namespace PharmacyInventory_Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6375ac17-3b3a-4fb1-bb04-f79103aa6ed5",
+                            Id = "3c945ce2-6708-4384-8b34-50c7779722ef",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f4d170f4-eba8-44c5-b068-1b2e1d87eb79",
+                            Id = "d72eae0d-ed56-4f0c-b095-a78141343473",
                             Name = "User",
                             NormalizedName = "USER"
                         });
